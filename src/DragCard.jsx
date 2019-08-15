@@ -21,20 +21,14 @@ const fromDragEvent = (dragEvent, dragStartEvent) => (dragEvent && dragStartEven
   y: dragEvent.y - dragStartEvent.y,
 }) : {});
 
-const getVelocity = (positions) => {
-  console.log('posiitons', positions);
-  let totalX = 0;
-  let totalY = 0;
-
-  for (let i = 0, { length } = positions; i < length; i += 0) {
-    const { x, y } = positions[i];
-    const factor = Math.pow(0.5, i);
-    totalX +=  factor * x;
-    totalY += factor * y;
+const getVelocity = (deltas) => console.log(deltas) || deltas.reduce(({ velocityX, velocityY }, { deltaX, deltaY }, index) => {
+  const factor = (1 / (index + 1));
+  console.log(deltaX, deltaY, factor);
+  return {
+    velocityX: velocityX + (deltaX * factor),
+    velocityY: velocityY + (deltaY * factor),
   }
-
-  return { x: totalX, y: totalY };
-}
+}, { velocityX: 0, velocityY: 0 });
 
 class DragCard extends Component {
   constructor(props) {
@@ -131,21 +125,25 @@ class DragCard extends Component {
 
   touchEnd = () => {
     this.lastTouchPosition = null;
+
+    const velocity = getVelocity(this.deltas.get());
+    this.deltas.clear();
+    console.log('velocity', velocity);
     // const [deltaX, deltaY] = this.lastDelta;
     // const velocityX = deltaX;
     // const velocityY = deltaY;
     // console.log('end', velocityX, velocityY);
-    // window.requestAnimationFrame(() => this.decay(velocityX, velocityY));
+    window.requestAnimationFrame(() => this.decay(velocity));
   }
 
-  decay = (velocityX, velocityY, elapsedTime = 1) => {
+  decay = ({ velocityX, velocityY }, elapsedTime = 1) => {
     if (Math.abs(velocityX) < 0.01  || Math.abs(velocityY) < 0.01) return;
 
     const newVX = velocityX * FRICTION * (1 / elapsedTime);
     const newVY = velocityY * FRICTION * (1 / elapsedTime);
-    this.move(newVX, newVY);
+    this.move({ deltaX: newVX, deltaY: newVY });
 
-    window.requestAnimationFrame(() => this.decay(newVX, newVY, elapsedTime + (1 / 60)));
+    window.requestAnimationFrame(() => this.decay({ velocityX: newVX, velocityY: newVY }, elapsedTime + (1 / 60)));
   }
 
   touchMove = (e) => {
