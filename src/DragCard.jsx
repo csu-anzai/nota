@@ -20,15 +20,29 @@ const HOME_POINT = {
 
 const AWAY_POINT = {
   x: 700,
-  y: 500,
-  gravity: 20,
+  y: 0,
+  gravity: 10,
+};
+
+const getPolynomialOfT = (a, b, initialVelocity) => (time) =>
+  (1/3 * a * Math.pow(time, 3)) + (1/2 * b * Math.pow(time, 2)) + (initialVelocity * time);
+
+const a = (duration, distance, initialVelocity) =>
+  3 * (initialVelocity / Math.pow(duration, 2)) - (6 * distance / Math.pow(duration, 3));
+
+const b = (duration, distance, initialVelocity) =>
+  (6 * distance / Math.pow(duration, 2)) - (4 * initialVelocity / duration);
+
+const getDistanceEquation = (duration, distance, initialVelocity) => {
+  const thisA = a(duration, distance, initialVelocity);
+  const thisB = b(duration, distance, initialVelocity);
+
+  return getPolynomialOfT(thisA, thisB, initialVelocity);
 };
 
 const getWinningRestingPoint = (restingPoints, position) => {
-  console.log(restingPoints, position);
   return restingPoints.reduce((target, restingPoint) => {
     const score = getRestingPointScore(restingPoint, position);
-    console.log(score);
     if (score > target.score) return { score, restingPoint };
 
     return target;
@@ -106,13 +120,17 @@ class DragCard extends Component {
     this.subscriptions.unsubscribe();
   }
 
-  handleTouchStart = (e) => {
+  getCurrentTopLeftPosition = () => {
     const { current: { style } } = this.card;
 
-    this.currentPosition = {
+    return {
       x: safelyGetNumber(style.left),
       y: safelyGetNumber(style.top),
     };
+  }
+
+  handleTouchStart = (e) => {
+    this.currentPosition = this.getCurrentTopLeftPosition();
   }
 
   handleTouchMove = (e) => {
@@ -136,24 +154,53 @@ class DragCard extends Component {
 
   handleTouchEnd = () => {
     const { restingPoint } = getWinningRestingPoint(this.restingPoints, this.lastTouchPosition);
-    console.log(restingPoint);
-
 
     // const velocity = getVelocity(this.deltas.get());
-
-    this.deltas.clear();
 
     const delta = { 
       deltaX: restingPoint.x - this.lastTouchPosition.x,
       deltaY: restingPoint.y - this.lastTouchPosition.y,
     };
 
-    window.requestAnimationFrame(() => this.ease(0, this.lastTouchPosition, delta, 120))
+    const distanceEquationX = getDistanceEquation(100, delta.deltaX, this.deltas.getLatest().deltaX);
+    const distanceEquationY = getDistanceEquation(100, delta.deltaY, this.deltas.getLatest().deltaY);
 
-    // this.lastTouchPosition = null;
+    console.log({
+      restingPoint,
+      lastTouchPosition: this.lastTouchPosition,
+      delta,
+      v: this.deltas.getLatest(),
+    });
 
+    const initialPosition = this.getCurrentTopLeftPosition();
+  
+
+    window.requestAnimationFrame(() => this.doStuff(distanceEquationX, distanceEquationY, initialPosition, 0, 100));
+
+    // window.requestAnimationFrame(() => this.ease(0, this.lastTouchPosition, delta, 120))
+
+
+
+    this.deltas.clear();
+    this.lastTouchPosition = null;
 
     // window.requestAnimationFrame(() => this.decay(velocity));
+  }
+
+  doStuff = (distanceEquationX, distanceEquationY, initialPosition, elapsedTime, duration) => {
+    if (elapsedTime > duration) {
+      console.log('finalPos', this.currentPosition);
+      return;
+    }
+
+    const newPos = {
+      x: initialPosition.x + distanceEquationX(elapsedTime),
+      y: initialPosition.y + distanceEquationY(elapsedTime),
+    };
+    // console.log(newPos);
+    this.updatePosition(newPos);
+
+    window.requestAnimationFrame(() => this.doStuff(distanceEquationX, distanceEquationY, initialPosition, elapsedTime + 1, duration));
   }
 
   ease = (timeElapsed, startingPosition, requiredChange, durationInFrames) => {
@@ -167,7 +214,7 @@ class DragCard extends Component {
       y: easing.quart.easeInOut(timeElapsed, startingPosition.y, requiredChange.deltaY, durationInFrames)
     };
 
-    console.log('newPosition', newPosition, startingPosition.x + requiredChange.deltaX);
+    // console.log('newPosition', newPosition, startingPosition.x + requiredChange.deltaX);
 
     this.updatePosition(newPosition);
 
@@ -186,7 +233,7 @@ class DragCard extends Component {
   updatePosition = (pos) => {
     const { current: { style } } = this.card;
 
-    style.top = `${pos.y}px`;
+    // style.top = `${pos.y}px`;
     style.left = `${pos.x}px`;
 
     this.currentPosition = pos;

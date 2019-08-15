@@ -20,6 +20,10 @@ class CappedArray {
   get = () => {
     return this.data;
   }
+
+  getLatest = () => {
+    return this.data[this.data.length - 1];
+  }
 }
 
 export default CappedArray;
