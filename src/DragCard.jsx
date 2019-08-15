@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
 import { fromEvent, BehaviorSubject } from 'rxjs';
-import { throttleTime, concatMap, takeUntil, map, withLatestFrom, tap } from 'rxjs/operators';
+import { throttleTime, concatMap, takeUntil, map, withLatestFrom, tap, mapTo } from 'rxjs/operators';
 import SubscriptionManager from './subscriptionManager';
+import CappedArray from './cappedArray';
 
 const FRICTION = .99;
 
@@ -20,13 +21,29 @@ const fromDragEvent = (dragEvent, dragStartEvent) => (dragEvent && dragStartEven
   y: dragEvent.y - dragStartEvent.y,
 }) : {});
 
+const getVelocity = (positions) => {
+  console.log('posiitons', positions);
+  let totalX = 0;
+  let totalY = 0;
+
+  for (let i = 0, { length } = positions; i < length; i += 0) {
+    const { x, y } = positions[i];
+    const factor = Math.pow(0.5, i);
+    totalX +=  factor * x;
+    totalY += factor * y;
+  }
+
+  return { x: totalX, y: totalY };
+}
+
 class DragCard extends Component {
   constructor(props) {
     super(props);
 
-    this.currentPosition = [0, 0];
-    this.lastTouchPosition = null;
-    this.lastDelta = [0, 0];
+    this.initialPosition = { x: 0, y: 0 };
+    // this.currentPosition = [0, 0];
+    // this.lastTouchPosition = null;
+    // this.lastDelta = [0, 0];
 
     this.observables = {};
     this.subscriptions = new SubscriptionManager();
@@ -49,7 +66,9 @@ class DragCard extends Component {
       )),
     );
     
-    const lastEndingPosition$ = new BehaviorSubject({ x: 0, y: 0 });
+    const lastEndingPosition$ = new BehaviorSubject(this.initialPosition);
+
+    let previousCurrentPositions = new CappedArray(5);
 
     const currentPosition$ = touchDrags$.pipe(
       withLatestFrom(lastEndingPosition$),
@@ -61,11 +80,15 @@ class DragCard extends Component {
     
     const endingPosition$ = touchEnd$.pipe(
       withLatestFrom(currentPosition$),
-      map(([, currentPosition]) => currentPosition),
-      tap(console.log),
+      tap(() => console.log(previousCurrentPositions.get())),
+      map(([, currentPosition]) => [currentPosition, getVelocity(previousCurrentPositions.get())]),
     );
 
-    endingPosition$.subscribe();
+    const endingVelocity$ = touchEnd$.pipe(
+      mapTo(getVelocity(previousCurrentPositions.get())),
+    );    
+
+    endingVelocity$.subscribe(v => console.log('velocity', v));
 
     Object.assign(this.observables, {
       touchStart$,
@@ -80,10 +103,17 @@ class DragCard extends Component {
     this.subscriptions.add({
       touchDrags: touchDrags$.subscribe(console.log),
       currentPosition: currentPosition$.subscribe(this.updatePosition),
+      previousPositions: currentPosition$.subscribe(previousCurrentPositions.push),
       // touchStart: touchStart$.subscribe(this.touchStart),
       // touchMove: touchMove$.subscribe(this.touchMove),
-      endingPosition: endingPosition$.subscribe(endingPosition => lastEndingPosition$.next(endingPosition)),
+      endingPosition: endingPosition$.subscribe((position) => {
+        lastEndingPosition$.next(position);
+      }),
     });
+  }
+
+  componentWillUnmount() {
+    this.subscriptions.unsubscribe();
   }
 
   touchStart = (e) => {
