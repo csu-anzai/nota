@@ -41,9 +41,9 @@ class DragCard extends Component {
     super(props);
 
     // this.initialPosition = { x: 0, y: 0 };
-    this.currentPosition = [0, 0];
+    this.currentPosition = { x: 0, y: 0 };
     this.lastTouchPosition = null;
-    this.lastDelta = [0, 0];
+    this.deltas = new CappedArray(3);
 
     this.observables = {};
     this.subscriptions = new SubscriptionManager();
@@ -122,17 +122,20 @@ class DragCard extends Component {
   touchStart = (e) => {
     // console.log(e);
     const { current: card } = this.card;
-    this.currentPosition = [parseInt(card.style.left || '0', 10), parseInt(card.style.top || '0', 10)];
+    this.currentPosition = {
+      x: parseInt(card.style.left || '0', 10),
+      y: parseInt(card.style.top || '0', 10)
+    };
     // console.log('start', this.currentPosition);
   }
 
   touchEnd = () => {
     this.lastTouchPosition = null;
-    const [deltaX, deltaY] = this.lastDelta;
-    const velocityX = deltaX;
-    const velocityY = deltaY;
+    // const [deltaX, deltaY] = this.lastDelta;
+    // const velocityX = deltaX;
+    // const velocityY = deltaY;
     // console.log('end', velocityX, velocityY);
-    window.requestAnimationFrame(() => this.decay(velocityX, velocityY));
+    // window.requestAnimationFrame(() => this.decay(velocityX, velocityY));
   }
 
   decay = (velocityX, velocityY, elapsedTime = 1) => {
@@ -148,36 +151,36 @@ class DragCard extends Component {
   touchMove = (e) => {
     // const mainTouch = e.touches[0];
     const { x: screenX, y: screenY } = e;
-    console.log(screenX, screenY);
 
     if (this.lastTouchPosition) {
-      const [x, y] = this.lastTouchPosition;
+      const { x, y } = this.lastTouchPosition;
 
       const deltaX = screenX - x;
       const deltaY = screenY - y;
 
-      this.move(deltaX, deltaY);
+      this.move({ deltaX, deltaY });
     }
 
-    this.lastTouchPosition = [screenX, screenY];
+    this.lastTouchPosition = { x: screenX, y: screenY };
   }
 
-  move = (deltaX, deltaY) => {
-    const [currentX, currentY] = this.currentPosition;
+  move = ({ deltaX, deltaY }) => {
+    const { x: currentX, y: currentY } = this.currentPosition;
 
-    const positionX = currentX + deltaX;
-    const positionY = currentY + deltaY;
+    const x = currentX + deltaX;
+    const y = currentY + deltaY;
 
-    this.updatePosition(positionX, positionY);
-    this.lastDelta = [(this.lastDelta[0] * 2 + deltaX)/3, (this.lastDelta[1] * 2 + deltaY)/3];
+    this.updatePosition({ x, y });
+    this.deltas.push({ deltaX, deltaY });
+    // this.lastDelta = [(this.lastDelta[0] * 2 + deltaX)/3, (this.lastDelta[1] * 2 + deltaY)/3];
     // console.log('move', deltaX, positionX, deltaY, positionY);
   }
 
-  updatePosition = (x, y) => {
+  updatePosition = (pos) => {
     const { current: card } = this.card;
-    card.style.top = `${y}px`;
-    card.style.left = `${x}px`;
-    this.currentPosition = [x, y];
+    card.style.top = `${pos.y}px`;
+    card.style.left = `${pos.x}px`;
+    this.currentPosition = pos;
   }
 
   render() {
