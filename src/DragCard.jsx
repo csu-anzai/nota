@@ -1,7 +1,24 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
+import { fromEvent, BehaviorSubject } from 'rxjs';
+import { throttleTime, concatMap, takeUntil, map, withLatestFrom, tap } from 'rxjs/operators';
+import SubscriptionManager from './subscriptionManager';
 
-const FRICTION = .9998;
+const FRICTION = .99;
+
+const toTouchEvent = ({ touches }) => {
+  const mainTouch = touches[0];
+
+  const { screenX, screenY } = mainTouch;
+  
+  return { x: screenX, y: screenY };
+};
+
+const fromDragEvent = (dragEvent, dragStartEvent) => (dragEvent && dragStartEvent ? ({
+  // which: dragEvent.which,
+  x: dragEvent.x - dragStartEvent.x,
+  y: dragEvent.y - dragStartEvent.y,
+}) : {});
 
 class DragCard extends Component {
   constructor(props) {
@@ -11,6 +28,9 @@ class DragCard extends Component {
     this.lastTouchPosition = null;
     this.lastDelta = [0, 0];
 
+    this.observables = {};
+    this.subscriptions = new SubscriptionManager();
+
     this.card = React.createRef();
   }
 
@@ -18,10 +38,52 @@ class DragCard extends Component {
     const { current } = this.card || {};
     if (!current) return;
 
-    current.addEventListener('touchstart', this.touchStart);
-    current.addEventListener('touchmove', this.touchMove);
-    // current.addEventListener('touchcancel', this.touchMove);
-    current.addEventListener('touchend', this.touchEnd);
+    const touchStart$ = fromEvent(current, 'touchstart').pipe(map(toTouchEvent));
+    const touchEnd$ = fromEvent(current, 'touchend');
+    const touchMove$ = fromEvent(current, 'touchmove').pipe(map(toTouchEvent));
+
+    const touchDrags$ = touchStart$.pipe(
+      concatMap(touchStartEvent => touchMove$.pipe(
+        takeUntil(touchEnd$),
+        map(dragEvent => fromDragEvent(dragEvent, touchStartEvent)),
+      )),
+    );
+    
+    const lastEndingPosition$ = new BehaviorSubject({ x: 0, y: 0 });
+
+    const currentPosition$ = touchDrags$.pipe(
+      withLatestFrom(lastEndingPosition$),
+      map(([ dragEvent, lastEndingPosition ]) => ({
+        x: dragEvent.x + lastEndingPosition.x,
+        y: dragEvent.y + lastEndingPosition.y,
+      })),
+    );
+    
+    const endingPosition$ = touchEnd$.pipe(
+      withLatestFrom(currentPosition$),
+      map(([, currentPosition]) => currentPosition),
+      tap(console.log),
+    );
+
+    endingPosition$.subscribe();
+
+    Object.assign(this.observables, {
+      touchStart$,
+      touchEnd$,
+      touchMove$,
+      touchDrags$,
+      currentPosition$,
+    });
+
+    // const { touchStart$, touchEnd$, touchMove$ } = this.observables;
+
+    this.subscriptions.add({
+      touchDrags: touchDrags$.subscribe(console.log),
+      currentPosition: currentPosition$.subscribe(this.updatePosition),
+      // touchStart: touchStart$.subscribe(this.touchStart),
+      // touchMove: touchMove$.subscribe(this.touchMove),
+      endingPosition: endingPosition$.subscribe(endingPosition => lastEndingPosition$.next(endingPosition)),
+    });
   }
 
   touchStart = (e) => {
@@ -43,11 +105,11 @@ class DragCard extends Component {
   decay = (velocityX, velocityY, elapsedTime = 1) => {
     if (Math.abs(velocityX) < 0.01  || Math.abs(velocityY) < 0.01) return;
 
-    const newVX = velocityX * FRICTION * (1 / elapsedTime) ;
+    const newVX = velocityX * FRICTION * (1 / elapsedTime);
     const newVY = velocityY * FRICTION * (1 / elapsedTime);
     this.move(newVX, newVY);
 
-    window.requestAnimationFrame(() => this.decay(newVX, newVY, elapsedTime + (1/100)));
+    window.requestAnimationFrame(() => this.decay(newVX, newVY, elapsedTime + (1 / 60)));
   }
 
   touchMove = (e) => {
@@ -73,15 +135,14 @@ class DragCard extends Component {
     const positionY = currentY + deltaY;
 
     this.updatePosition(positionX, positionY);
-    this.lastDelta = [(this.lastDelta[0] * 2 + deltaX)/3, (this.lastDelta[0] * 2 + deltaY)/3];
+    this.lastDelta = [(this.lastDelta[0] * 2 + deltaX)/3, (this.lastDelta[1] * 2 + deltaY)/3];
     // console.log('move', deltaX, positionX, deltaY, positionY);
   }
 
-  updatePosition = (x, y) => {
+  updatePosition = ({ x, y }) => {
     const { current: card } = this.card;
     card.style.top = `${y}px`;
     card.style.left = `${x}px`; 
-    this.currentPosition = [x, y];
   }
 
   render() {
