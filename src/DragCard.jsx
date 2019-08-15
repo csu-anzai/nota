@@ -4,6 +4,7 @@ import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
 import SubscriptionManager from './subscriptionManager';
 import CappedArray from './cappedArray';
+import easing from './easing';
 
 const FRICTION = .99;
 
@@ -137,15 +138,41 @@ class DragCard extends Component {
     const { restingPoint } = getWinningRestingPoint(this.restingPoints, this.lastTouchPosition);
     console.log(restingPoint);
 
-    this.lastTouchPosition = null;
 
     // const velocity = getVelocity(this.deltas.get());
 
     this.deltas.clear();
 
+    const delta = { 
+      deltaX: restingPoint.x - this.lastTouchPosition.x,
+      deltaY: restingPoint.y - this.lastTouchPosition.y,
+    };
+
+    window.requestAnimationFrame(() => this.ease(0, this.lastTouchPosition, delta, 120))
+
+    // this.lastTouchPosition = null;
+
 
     // window.requestAnimationFrame(() => this.decay(velocity));
   }
+
+  ease = (timeElapsed, startingPosition, requiredChange, durationInFrames) => {
+    if (timeElapsed >= durationInFrames) {
+      this.lastTouchPosition = null;
+      return;
+    }
+
+    const newPosition = {
+      x: easing.quart.easeInOut(timeElapsed, startingPosition.x, requiredChange.deltaX, durationInFrames),
+      y: easing.quart.easeInOut(timeElapsed, startingPosition.y, requiredChange.deltaY, durationInFrames)
+    };
+
+    console.log('newPosition', newPosition, startingPosition.x + requiredChange.deltaX);
+
+    this.updatePosition(newPosition);
+
+    window.requestAnimationFrame(() => this.ease(timeElapsed + 1, startingPosition, requiredChange, durationInFrames));
+  } 
 
   move = ({ deltaX, deltaY }) => {
     const { x: currentX, y: currentY } = this.currentPosition;
@@ -165,18 +192,18 @@ class DragCard extends Component {
     this.currentPosition = pos;
   }
 
-  decay = ({ velocityX, velocityY }, elapsedTime = 1) => {
-    if (Math.abs(velocityX) < BASICALLY_ZERO || Math.abs(velocityY) < BASICALLY_ZERO) return;
+  // decay = ({ velocityX, velocityY }, elapsedTime = 1) => {
+  //   if (Math.abs(velocityX) < BASICALLY_ZERO || Math.abs(velocityY) < BASICALLY_ZERO) return;
 
-    const factor = FRICTION * (1 / elapsedTime);
+  //   const factor = FRICTION * (1 / elapsedTime);
 
-    const newVX = velocityX * factor;
-    const newVY = velocityY * factor;
+  //   const newVX = velocityX * factor;
+  //   const newVY = velocityY * factor;
 
-    this.move({ deltaX: newVX, deltaY: newVY });
+  //   this.move({ deltaX: newVX, deltaY: newVY });
 
-    window.requestAnimationFrame(() => this.decay({ velocityX: newVX, velocityY: newVY }, elapsedTime + FRAME));
-  }
+  //   window.requestAnimationFrame(() => this.decay({ velocityX: newVX, velocityY: newVY }, elapsedTime + FRAME));
+  // }
 
   render() {
     const { children } = this.props;
