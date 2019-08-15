@@ -11,8 +11,35 @@ const FRAME = 1 / 60;
 
 const BASICALLY_ZERO = 0.01;
 
-const toTouchEvent = ({ touches }) => {
-  const mainTouch = touches[0];
+const HOME_POINT = {
+  x: 0,
+  y: 0,
+  gravity: 10,
+};
+
+const AWAY_POINT = {
+  x: 700,
+  y: 500,
+  gravity: 20,
+};
+
+const getWinningRestingPoint = (restingPoints, position) => {
+  console.log(restingPoints, position);
+  return restingPoints.reduce((target, restingPoint) => {
+    const score = getRestingPointScore(restingPoint, position);
+    console.log(score);
+    if (score > target.score) return { score, restingPoint };
+
+    return target;
+  }, { score: 0, restingPoint: null });
+}
+
+const getRestingPointScore = ({ x, y, gravity }, {x: posX, y: posY }) => gravity / ( Math.abs(x - posX) + Math.abs(y - posY) );
+
+const toTouchEvent = (e) => {
+  e.preventDefault();
+
+  const mainTouch = e.touches[0];
 
   const { screenX, screenY } = mainTouch;
   
@@ -43,6 +70,8 @@ class DragCard extends Component {
     this.currentPosition = { x: 0, y: 0 };
     this.lastTouchPosition = null;
     this.deltas = new CappedArray(3);
+
+    this.restingPoints = [HOME_POINT, AWAY_POINT];
 
     this.observables = {};
     this.subscriptions = new SubscriptionManager();
@@ -105,13 +134,17 @@ class DragCard extends Component {
   }
 
   handleTouchEnd = () => {
+    const { restingPoint } = getWinningRestingPoint(this.restingPoints, this.lastTouchPosition);
+    console.log(restingPoint);
+
     this.lastTouchPosition = null;
 
-    const velocity = getVelocity(this.deltas.get());
+    // const velocity = getVelocity(this.deltas.get());
 
     this.deltas.clear();
 
-    window.requestAnimationFrame(() => this.decay(velocity));
+
+    // window.requestAnimationFrame(() => this.decay(velocity));
   }
 
   move = ({ deltaX, deltaY }) => {
