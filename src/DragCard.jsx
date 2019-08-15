@@ -40,10 +40,10 @@ class DragCard extends Component {
   constructor(props) {
     super(props);
 
-    this.initialPosition = { x: 0, y: 0 };
-    // this.currentPosition = [0, 0];
-    // this.lastTouchPosition = null;
-    // this.lastDelta = [0, 0];
+    // this.initialPosition = { x: 0, y: 0 };
+    this.currentPosition = [0, 0];
+    this.lastTouchPosition = null;
+    this.lastDelta = [0, 0];
 
     this.observables = {};
     this.subscriptions = new SubscriptionManager();
@@ -59,56 +59,59 @@ class DragCard extends Component {
     const touchEnd$ = fromEvent(current, 'touchend');
     const touchMove$ = fromEvent(current, 'touchmove').pipe(map(toTouchEvent));
 
-    const touchDrags$ = touchStart$.pipe(
-      concatMap(touchStartEvent => touchMove$.pipe(
-        takeUntil(touchEnd$),
-        map(dragEvent => fromDragEvent(dragEvent, touchStartEvent)),
-      )),
-    );
+    // const touchDrags$ = touchStart$.pipe(
+    //   concatMap(touchStartEvent => touchMove$.pipe(
+    //     takeUntil(touchEnd$),
+    //     map(dragEvent => fromDragEvent(dragEvent, touchStartEvent)),
+    //   )),
+    // );
     
-    const lastEndingPosition$ = new BehaviorSubject(this.initialPosition);
+    // const lastEndingPosition$ = new BehaviorSubject(this.initialPosition);
 
-    let previousCurrentPositions = new CappedArray(5);
+    // let previousCurrentPositions = new CappedArray(5);
 
-    const currentPosition$ = touchDrags$.pipe(
-      withLatestFrom(lastEndingPosition$),
-      map(([ dragEvent, lastEndingPosition ]) => ({
-        x: dragEvent.x + lastEndingPosition.x,
-        y: dragEvent.y + lastEndingPosition.y,
-      })),
-    );
+    // const currentPosition$ = touchDrags$.pipe(
+    //   withLatestFrom(lastEndingPosition$),
+    //   map(([ dragEvent, lastEndingPosition ]) => ({
+    //     x: dragEvent.x + lastEndingPosition.x,
+    //     y: dragEvent.y + lastEndingPosition.y,
+    //   })),
+    // );
     
-    const endingPosition$ = touchEnd$.pipe(
-      withLatestFrom(currentPosition$),
-      tap(() => console.log(previousCurrentPositions.get())),
-      map(([, currentPosition]) => [currentPosition, getVelocity(previousCurrentPositions.get())]),
-    );
+    // const endingPosition$ = touchEnd$.pipe(
+    //   withLatestFrom(currentPosition$),
+    //   tap(() => console.log(previousCurrentPositions.get())),
+    //   map(([, currentPosition]) => [currentPosition, getVelocity(previousCurrentPositions.get())]),
+    // );
 
-    const endingVelocity$ = touchEnd$.pipe(
-      mapTo(getVelocity(previousCurrentPositions.get())),
-    );    
+    // const endingVelocity$ = touchEnd$.pipe(
+    //   mapTo(getVelocity(previousCurrentPositions.get())),
+    // );    
 
-    endingVelocity$.subscribe(v => console.log('velocity', v));
+    // endingVelocity$.subscribe(v => console.log('velocity', v));
 
     Object.assign(this.observables, {
       touchStart$,
       touchEnd$,
       touchMove$,
-      touchDrags$,
-      currentPosition$,
+      // touchDrags$,
+      // currentPosition$,
     });
 
     // const { touchStart$, touchEnd$, touchMove$ } = this.observables;
 
     this.subscriptions.add({
-      touchDrags: touchDrags$.subscribe(console.log),
-      currentPosition: currentPosition$.subscribe(this.updatePosition),
-      previousPositions: currentPosition$.subscribe(previousCurrentPositions.push),
-      // touchStart: touchStart$.subscribe(this.touchStart),
-      // touchMove: touchMove$.subscribe(this.touchMove),
-      endingPosition: endingPosition$.subscribe((position) => {
-        lastEndingPosition$.next(position);
-      }),
+      touchStart: touchStart$.subscribe(this.touchStart),
+      touchMove: touchMove$.subscribe(this.touchMove),
+      touchEnd: touchEnd$.subscribe(this.touchEnd),
+      // touchDrags: touchDrags$.subscribe(console.log),
+      // currentPosition: currentPosition$.subscribe(this.updatePosition),
+      // previousPositions: currentPosition$.subscribe(previousCurrentPositions.push),
+      // // touchStart: touchStart$.subscribe(this.touchStart),
+      // // touchMove: touchMove$.subscribe(this.touchMove),
+      // endingPosition: endingPosition$.subscribe((position) => {
+      //   lastEndingPosition$.next(position);
+      // }),
     });
   }
 
@@ -143,8 +146,9 @@ class DragCard extends Component {
   }
 
   touchMove = (e) => {
-    const mainTouch = e.touches[0];
-    const { screenX, screenY } = mainTouch;
+    // const mainTouch = e.touches[0];
+    const { x: screenX, y: screenY } = e;
+    console.log(screenX, screenY);
 
     if (this.lastTouchPosition) {
       const [x, y] = this.lastTouchPosition;
@@ -169,10 +173,11 @@ class DragCard extends Component {
     // console.log('move', deltaX, positionX, deltaY, positionY);
   }
 
-  updatePosition = ({ x, y }) => {
+  updatePosition = (x, y) => {
     const { current: card } = this.card;
     card.style.top = `${y}px`;
-    card.style.left = `${x}px`; 
+    card.style.left = `${x}px`;
+    this.currentPosition = [x, y];
   }
 
   render() {
