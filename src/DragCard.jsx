@@ -11,7 +11,7 @@ const HOME_POINT = {
 };
 
 const AWAY_POINT = {
-  position: 500,
+  getPosition: () => document.body.clientWidth - 100,
   gravity: 10,
 };
 
@@ -113,6 +113,8 @@ class DragCard extends Component {
     const { current } = this.card || {};
 
     if (!current) return;
+
+    current.style.position = 'absolute';
 
     const touchStart$ = fromEvent(current, 'touchstart').pipe(map(toTouchEvent));
     const touchEnd$ = fromEvent(current, 'touchend');

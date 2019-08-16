@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import DragContainer from './DragContainer';
-import DragCard from './DragCard';
+import DraggableCard from './DraggableCard';
 
 class App extends Component {
   render() {
     return (
       <DragContainer>
-        <DragCard>
+        <DraggableCard>
           <span>Hello</span>
-        </DragCard>
+        </DraggableCard>
       </DragContainer>
     );
   }

@@ -9,8 +9,8 @@ const unsubscribeFrom = (subscriptions, key) => {
 };
 
 class SubscriptionManager {
-  constructor() {
-    this.subscriptions = {};
+  constructor(initialSubscriptionsMap = {}) {
+    this.subscriptions = initialSubscriptionsMap;
   }
 
   add = (nameOrSubscriptions, subscription) => {
