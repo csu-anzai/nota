@@ -8,15 +8,19 @@ const HOME_POINT = {
 };
 
 const AWAY_POINT = {
-  getPosition: (el) => el.parentElement.clientWidth - 100,
+  getPosition: (el) => el.parentElement.clientHeight - 100,
   gravity: 10,
 };
 
 const DraggableCard = () => {
   return (
-    <Draggable restingPoints={[HOME_POINT, AWAY_POINT]} axis={AXIS.X}>
+    <Draggable
+      restingPoints={[HOME_POINT, AWAY_POINT]}
+      axis={AXIS.Y}
+      animationDuration={600}
+    >
       {({ draggableRef }) => (
-        <Card ref={draggableRef}>Hello</Card>
+        <Card ref={draggableRef}></Card>
       )}
     </Draggable>
   )
