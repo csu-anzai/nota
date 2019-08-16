@@ -1,6 +1,7 @@
 import React from 'react';
 import Draggable, { AXIS } from './Draggable';
 import styled from '@emotion/styled';
+import ResizeHook from './ResizeHook';
 
 const HOME_POINT = {
   position: 0,
@@ -19,9 +20,10 @@ const DraggableCard = () => {
       axis={AXIS.Y}
       animationDuration={600}
     >
-      {({ draggableRef, animateTo }) => (
+      {({ draggableRef, animateTo, animateToClosestRestingPoint }) => (
         <>
-          <button onClick={() => animateTo(400)} type="button">Hi</button>
+          <button onClick={() => animateTo(400)} type="button" style={{ position: 'absolute', top: 0, right: 0 }}>Hi</button>
+          <ResizeHook onResize={() => animateToClosestRestingPoint()} />
           <Card ref={draggableRef}></Card>
         </>
       )}
