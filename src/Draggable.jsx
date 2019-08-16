@@ -4,6 +4,7 @@ import SubscriptionManager from './subscriptionManager';
 import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './draggableHelpers';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { safelyCall } from './helpers';
 
 export const AXIS = {
   X: 'x',
@@ -116,12 +117,14 @@ class Draggable extends Component {
   }
 
   animateTo = (
-    targetPosition,
+    point,
     animationDuration = (this.props.animationDuration || DEFAULT_ANIMATION_MS),
     element = this.draggableRef.current,
     velocity = this.getVelocity(),
     position = this.currentPosition,
   ) => {
+    const { position: targetPosition } = point;
+
     if (!Number.isInteger(targetPosition) || !element) return;
 
     const delta = targetPosition - position;
@@ -133,10 +136,19 @@ class Draggable extends Component {
     this.deltas.clear();
     this.lastTouchPosition = null;
 
+    const { onAnimateTo } = this.props;
+    safelyCall(onAnimateTo, {
+      point,
+      animationDuration,
+      element,
+      velocity,
+      position,
+    });
+
     this.updatePosition(targetPosition);
   }
 
-  getClosestRestingPointPosition = (
+  getClosestRestingPoint = (
     element = this.draggableRef.current,
     position = this.currentPosition,
     velocity = this.getVelocity(),
@@ -148,7 +160,7 @@ class Draggable extends Component {
 
     if (!restingPoints) return;
 
-    const restingPointPosition = getWinningRestingPoint({
+    const restingPointResult = getWinningRestingPoint({
       restingPoints,
       position,
       velocity,
@@ -156,7 +168,7 @@ class Draggable extends Component {
       element,
     });
 
-    return restingPointPosition || 0;
+    return restingPointResult;
   }
   
   animateToClosestRestingPoint = () => {
@@ -165,10 +177,10 @@ class Draggable extends Component {
     const position = this.currentPosition;
     const velocity = this.getVelocity();
 
-    const restingPointPosition = this.getClosestRestingPointPosition(element, position, velocity);
+    const restingPointResult = this.getClosestRestingPoint(element, position, velocity);
     
     this.animateTo(
-      restingPointPosition,
+      restingPointResult,
       animationDuration,
       element,
       velocity,
@@ -186,7 +198,7 @@ class Draggable extends Component {
     return children({
       draggableRef: this.draggableRef,
       animateTo: this.animateTo,
-      getClosestRestingPointPosition: this.getClosestRestingPointPosition,
+      getClosestRestingPoint: this.getClosestRestingPoint,
       animateToClosestRestingPoint: this.animateToClosestRestingPoint,
     });
   }

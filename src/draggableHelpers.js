@@ -13,17 +13,15 @@ export const toTouchEvent = (e) => {
 export const getWinningRestingPoint = (args) => {
   const { restingPoints } = args;
 
-  const winningRestingPoint = restingPoints.reduce((target, restingPoint) => {
-    const { score, restingPointPosition } = getRestingPointScore(restingPoint, args);
+  const restingPointResult = restingPoints.reduce((target, restingPoint) => {
+    const { score, position } = getRestingPointScore(restingPoint, args);
     
-    if (score > target.score) return { score, restingPointPosition };
+    if (score > target.score) return { score, position, restingPoint };
 
     return target;
-  }, { score: 0, restingPointPosition: 0 });
-
-  const { restingPointPosition } = winningRestingPoint || {};
+  }, { score: 0, position: 0, restingPoint: null });
   
-  return restingPointPosition;
+  return restingPointResult;
 };
 
 const getRestingPointScore = (
@@ -39,7 +37,7 @@ const getRestingPointScore = (
 
   return {
     score: (gravity / Math.abs(restingPointPosition - (position + velocity * slideEffect))),
-    restingPointPosition,
+    position: restingPointPosition,
   };
 };
 
