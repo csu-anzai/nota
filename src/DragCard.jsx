@@ -19,37 +19,26 @@ const HOME_POINT = {
 };
 
 const AWAY_POINT = {
-  x: 700,
+  x: 1100,
   y: 0,
   gravity: 10,
 };
 
-const getPolynomialOfT = (a, b, initialVelocity) => (time) =>
-  (1/3 * a * Math.pow(time, 3)) + (1/2 * b * Math.pow(time, 2)) + (initialVelocity * time);
+const SLIDE_EFFECT = 10;
 
-const a = (duration, distance, initialVelocity) =>
-  3 * (initialVelocity / Math.pow(duration, 2)) - (6 * distance / Math.pow(duration, 3));
+const APPROX_MAX_DIFFERENCE = 20;
 
-const b = (duration, distance, initialVelocity) =>
-  (6 * distance / Math.pow(duration, 2)) - (4 * initialVelocity / duration);
-
-const getDistanceEquation = (duration, distance, initialVelocity) => {
-  const thisA = a(duration, distance, initialVelocity);
-  const thisB = b(duration, distance, initialVelocity);
-
-  return getPolynomialOfT(thisA, thisB, initialVelocity);
-};
-
-const getWinningRestingPoint = (restingPoints, position) => {
+const getWinningRestingPoint = (restingPoints, position, velocity) => {
   return restingPoints.reduce((target, restingPoint) => {
-    const score = getRestingPointScore(restingPoint, position);
+    const score = getRestingPointScore(restingPoint, position, velocity);
     if (score > target.score) return { score, restingPoint };
 
     return target;
   }, { score: 0, restingPoint: null });
 }
 
-const getRestingPointScore = ({ x, y, gravity }, {x: posX, y: posY }) => gravity / ( Math.abs(x - posX) + Math.abs(y - posY) );
+const getRestingPointScore = ({ x, y, gravity }, {x: posX, y: posY }, { velocityX, velocityY}) =>
+  gravity / ( Math.abs(x - (posX + velocityX * SLIDE_EFFECT)) + Math.abs(y - (posY + velocityY * SLIDE_EFFECT)) );
 
 const toTouchEvent = (e) => {
   e.preventDefault();
@@ -74,9 +63,48 @@ const getNextVelocity = (
   }
 };
 
-const safelyGetNumber = str => parseInt(str || '0', 10);
-
 const getVelocity = (deltas) => deltas.reduce(getNextVelocity, { velocityX: 0, velocityY: 0 });
+
+const signsAreDifferent = (a, b) => a * b < 0;
+
+const ANIMATION_TIME = .06
+
+const clamp = (number, bottom, top) => {
+  if (number > top) return top;
+  if (number < bottom) return bottom;
+  return number;
+}
+
+const getBezierHandle = ({ velocityX, velocityY }, { deltaX, deltaY }) => {
+  const averageDelta = (deltaX + deltaY) / 2
+
+  const averageVelocityForMove = averageDelta * ANIMATION_TIME;
+  const averageVelocity = (velocityX + velocityY) / 2;
+
+  const relativeMagnitudeOfVelocity = (Math.abs(averageVelocity) - Math.abs(averageVelocityForMove)) / APPROX_MAX_DIFFERENCE; // why 20?;
+  const clampedRMV = clamp(relativeMagnitudeOfVelocity, -1, 1);
+
+  let bezierA = -0.5 * clampedRMV + 0.5; // A = -(1/2)rmv + 0.5
+  let bezierB = 0.5 * clampedRMV + 0.5; // B = (1/2)rmv + 0.5
+
+  bezierA = clamp(bezierA, 0, 1); // prevent spilling outside logical range
+  bezierB = clamp(bezierB, -1, 1); // prevent spilling outside logical range
+
+  if (signsAreDifferent(averageVelocity, averageVelocityForMove)) { // if moving in the wrong direction
+    bezierB *= -1; // flip B
+  }
+
+  console.log({
+    bezierA,
+    bezierB,
+    averageDelta,
+    relativeMagnitudeOfVelocity,
+    averageVelocity,
+    averageVelocityForMove,
+  });
+
+  return { bezierA, bezierB };
+}
 
 class DragCard extends Component {
   constructor(props) {
@@ -120,17 +148,8 @@ class DragCard extends Component {
     this.subscriptions.unsubscribe();
   }
 
-  getCurrentTopLeftPosition = () => {
-    const { current: { style } } = this.card;
-
-    return {
-      x: safelyGetNumber(style.left),
-      y: safelyGetNumber(style.top),
-    };
-  }
-
   handleTouchStart = (e) => {
-    this.currentPosition = this.getCurrentTopLeftPosition();
+    this.card.current.style.transition = '';
   }
 
   handleTouchMove = (e) => {
@@ -153,73 +172,24 @@ class DragCard extends Component {
   }
 
   handleTouchEnd = () => {
-    const { restingPoint } = getWinningRestingPoint(this.restingPoints, this.lastTouchPosition);
+    const velocity = getVelocity(this.deltas.get());
 
-    // const velocity = getVelocity(this.deltas.get());
+    const { restingPoint } = getWinningRestingPoint(this.restingPoints, this.lastTouchPosition, velocity);
 
     const delta = { 
       deltaX: restingPoint.x - this.lastTouchPosition.x,
       deltaY: restingPoint.y - this.lastTouchPosition.y,
     };
 
-    const distanceEquationX = getDistanceEquation(100, delta.deltaX, this.deltas.getLatest().deltaX);
-    const distanceEquationY = getDistanceEquation(100, delta.deltaY, this.deltas.getLatest().deltaY);
+    const { bezierA, bezierB } = getBezierHandle(velocity, delta);
 
-    console.log({
-      restingPoint,
-      lastTouchPosition: this.lastTouchPosition,
-      delta,
-      v: this.deltas.getLatest(),
-    });
-
-    const initialPosition = this.getCurrentTopLeftPosition();
-  
-
-    window.requestAnimationFrame(() => this.doStuff(distanceEquationX, distanceEquationY, initialPosition, 0, 100));
-
-    // window.requestAnimationFrame(() => this.ease(0, this.lastTouchPosition, delta, 120))
-
-
+    this.card.current.style.transition = `transform 0.6s cubic-bezier(${bezierA}, ${bezierB}, 0.5, 1)`;
 
     this.deltas.clear();
     this.lastTouchPosition = null;
 
-    // window.requestAnimationFrame(() => this.decay(velocity));
+    this.updatePosition({ x: restingPoint.x, y: restingPoint.y });
   }
-
-  doStuff = (distanceEquationX, distanceEquationY, initialPosition, elapsedTime, duration) => {
-    if (elapsedTime > duration) {
-      console.log('finalPos', this.currentPosition);
-      return;
-    }
-
-    const newPos = {
-      x: initialPosition.x + distanceEquationX(elapsedTime),
-      y: initialPosition.y + distanceEquationY(elapsedTime),
-    };
-    // console.log(newPos);
-    this.updatePosition(newPos);
-
-    window.requestAnimationFrame(() => this.doStuff(distanceEquationX, distanceEquationY, initialPosition, elapsedTime + 1, duration));
-  }
-
-  ease = (timeElapsed, startingPosition, requiredChange, durationInFrames) => {
-    if (timeElapsed >= durationInFrames) {
-      this.lastTouchPosition = null;
-      return;
-    }
-
-    const newPosition = {
-      x: easing.quart.easeInOut(timeElapsed, startingPosition.x, requiredChange.deltaX, durationInFrames),
-      y: easing.quart.easeInOut(timeElapsed, startingPosition.y, requiredChange.deltaY, durationInFrames)
-    };
-
-    // console.log('newPosition', newPosition, startingPosition.x + requiredChange.deltaX);
-
-    this.updatePosition(newPosition);
-
-    window.requestAnimationFrame(() => this.ease(timeElapsed + 1, startingPosition, requiredChange, durationInFrames));
-  } 
 
   move = ({ deltaX, deltaY }) => {
     const { x: currentX, y: currentY } = this.currentPosition;
@@ -233,24 +203,10 @@ class DragCard extends Component {
   updatePosition = (pos) => {
     const { current: { style } } = this.card;
 
-    // style.top = `${pos.y}px`;
-    style.left = `${pos.x}px`;
+    style.transform = `translate(${pos.x}px, ${pos.y}px)`;
 
     this.currentPosition = pos;
   }
-
-  // decay = ({ velocityX, velocityY }, elapsedTime = 1) => {
-  //   if (Math.abs(velocityX) < BASICALLY_ZERO || Math.abs(velocityY) < BASICALLY_ZERO) return;
-
-  //   const factor = FRICTION * (1 / elapsedTime);
-
-  //   const newVX = velocityX * factor;
-  //   const newVY = velocityY * factor;
-
-  //   this.move({ deltaX: newVX, deltaY: newVY });
-
-  //   window.requestAnimationFrame(() => this.decay({ velocityX: newVX, velocityY: newVY }, elapsedTime + FRAME));
-  // }
 
   render() {
     const { children } = this.props;
