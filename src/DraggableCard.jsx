@@ -19,8 +19,11 @@ const DraggableCard = () => {
       axis={AXIS.Y}
       animationDuration={600}
     >
-      {({ draggableRef }) => (
-        <Card ref={draggableRef}></Card>
+      {({ draggableRef, animateTo }) => (
+        <>
+          <button onClick={() => animateTo(400)} type="button">Hi</button>
+          <Card ref={draggableRef}></Card>
+        </>
       )}
     </Draggable>
   )

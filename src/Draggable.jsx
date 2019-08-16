@@ -97,43 +97,7 @@ class Draggable extends Component {
   }
 
   handleTouchEnd = () => {
-    const { restingPoints } = this.props;
-
-    if (!restingPoints) return;
-    // TODO: validateRestingPoints(restingPoints)
-
-    const { current } = this.draggableRef;
-    if (!current) return;
-
-    const {
-      slideEffect = DEFAULT_SLIDE_EFFECT,
-      animationDuration = DEFAULT_ANIMATION_MS,
-    } = this.props;
-    
-    const velocity = getVelocity(this.deltas.get());
-
-    const restingPointPosition = getWinningRestingPoint({
-      restingPoints,
-      position: this.lastTouchPosition,
-      velocity,
-      slideEffect,
-      element: current,
-    });
-
-    console.log(restingPointPosition);
-
-    if (!Number.isInteger(restingPointPosition)) return;
-
-    const delta = restingPointPosition - this.lastTouchPosition;
-
-    const { bezierA, bezierB } = getBezierHandle(velocity, delta, animationDuration);
-
-    current.style.transition = `transform ${animationDuration}ms cubic-bezier(${bezierA}, ${bezierB}, 0.5, 1)`;
-
-    this.deltas.clear();
-    this.lastTouchPosition = null;
-
-    this.updatePosition(restingPointPosition);
+    this.animateToClosestRestingPoint();
   }
 
   move = (delta) => {
@@ -151,11 +115,79 @@ class Draggable extends Component {
     this.currentPosition = pos;
   }
 
+  animateTo = (
+    targetPosition,
+    animationDuration = (this.props.animationDuration || DEFAULT_ANIMATION_MS),
+    element = this.draggableRef.current,
+    velocity = this.getVelocity(),
+    position = this.currentPosition,
+  ) => {
+    if (!Number.isInteger(targetPosition) || !element) return;
+
+    const delta = targetPosition - position;
+
+    const { bezierA, bezierB } = getBezierHandle(velocity, delta, animationDuration);
+
+    element.style.transition = `transform ${animationDuration}ms cubic-bezier(${bezierA}, ${bezierB}, 0.5, 1)`;
+
+    this.deltas.clear();
+    this.lastTouchPosition = null;
+
+    this.updatePosition(targetPosition);
+  }
+
+  getClosestRestingPointPosition = (
+    element = this.draggableRef.current,
+    position = this.currentPosition,
+    velocity = this.getVelocity(),
+  ) => {
+    const {
+      restingPoints,
+      slideEffect = DEFAULT_SLIDE_EFFECT,
+    } = this.props;
+
+    if (!restingPoints) return;
+
+    const restingPointPosition = getWinningRestingPoint({
+      restingPoints,
+      position,
+      velocity,
+      slideEffect,
+      element,
+    });
+
+    return restingPointPosition || 0;
+  }
+  
+  animateToClosestRestingPoint = () => {
+    const { animationDuration = DEFAULT_ANIMATION_MS } = this.props;
+    const element = this.draggableRef.current;
+    const position = this.currentPosition;
+    const velocity = this.getVelocity();
+
+    const restingPointPosition = this.getClosestRestingPointPosition(element, position, velocity);
+    
+    this.animateTo(
+      restingPointPosition,
+      animationDuration,
+      element,
+      velocity,
+      position,
+    );
+  }
+
+  getVelocity = () => {
+    return getVelocity(this.deltas.get());
+  }
+
   render() {
     const { children } = this.props;
 
     return children({
       draggableRef: this.draggableRef,
+      animateTo: this.animateTo,
+      getClosestRestingPointPosition: this.getClosestRestingPointPosition,
+      animateToClosestRestingPoint: this.animateToClosestRestingPoint,
     });
   }
 }
