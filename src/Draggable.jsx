@@ -56,8 +56,6 @@ class Draggable extends Component {
 
     const { current } = this.draggableRef || {};
 
-    console.log('init', current);
-
     if (!current) return;
 
     const touchStart$ = fromEvent(current, 'touchstart').pipe(map(toTouchEvent));

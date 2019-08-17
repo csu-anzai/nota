@@ -33,20 +33,27 @@ class DraggableCard extends Component {
     this.restingPoints.find(({ }))
   }
 
-  handleAnimateTo = ({ point }) => {
-    if (!point) return;
-    console.log(point);
-    const { id } = point.restingPoint;
+  handleAnimateTo = ({ point: { restingPoint }}) => {
+    if (!restingPoint) return;
+    const { id } = restingPoint;
 
     this.currentRestingPoint = this.restingPoints.find(rp => rp.id === id);
-    console.log(this.currentRestingPoint);
   }
 
   handleClick = (animateTo, draggableRef) => {
-    console.log(this.currentRestingPoint);
-    const { id: restingPointId } = this.currentRestingPoint;
-    if (restingPointId === HOME_POINT.id) animateTo({ position: getAwayPosition(draggableRef.current), restingPoint: AWAY_POINT });
-    else animateTo({ position: HOME_POINT.position, restingPoint: HOME_POINT });
+    const { id: restingPointId } = this.currentRestingPoint || {};
+
+    if (restingPointId === HOME_POINT.id) {
+      animateTo({
+        position: getAwayPosition(draggableRef.current),
+        restingPoint: AWAY_POINT,
+      });
+    } else {
+      animateTo({
+        position: HOME_POINT.position,
+        restingPoint: HOME_POINT,
+      });
+    }
   }
   
   render() {
@@ -67,7 +74,7 @@ class DraggableCard extends Component {
               Hi
             </button>
             <ResizeHook onResize={() => animateToClosestRestingPoint()} />
-            <Card ref={draggableRef}></Card>
+            <Card ref={draggableRef} onClick={() => this.handleClick(animateTo, draggableRef)}></Card>
           </>
         )}
       </Draggable>
