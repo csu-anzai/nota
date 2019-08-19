@@ -121,6 +121,8 @@ class Draggable extends Component {
     velocity = this.getVelocity(),
     position = this.currentPosition,
   ) => {
+    if (!point) return;
+    
     const { position: targetPosition } = point;
 
     if (!Number.isInteger(targetPosition) || !element) return;

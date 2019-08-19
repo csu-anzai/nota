@@ -3,63 +3,78 @@ import Draggable, { AXIS } from './Draggable';
 import styled from '@emotion/styled';
 import ResizeHook from './ResizeHook';
 
-const getAwayPosition = (el) => el.parentElement.clientHeight - 100;
+const getAwayPosition = (el) => el.parentElement.clientHeight - 40;
 
-const HOME_POINT = {
+const FULL = {
   id: 1,
   position: 0,
   gravity: 10,
 };
 
-const AWAY_POINT = {
+const COLLAPSED = {
   id: 2,
   getPosition: getAwayPosition,
   gravity: 10,
 };
 
+const HIDDEN = {
+  id: 3,
+  getPosition: () => window.document.body.clientHeight,
+  gravity: 10,
+};
+
+const getValidRestingPoints = current => current.id === 2 ? [FULL, COLLAPSED, HIDDEN] : [FULL, COLLAPSED]
+
 class DraggableCard extends Component {
   constructor(props) {
     super(props);
 
-    this.restingPoints = [HOME_POINT, AWAY_POINT];
-    this.currentRestingPoint = this.restingPoints[0];
+    this.currentRestingPoint = FULL;
+
+    this.state = {
+      restingPoints: getValidRestingPoints(this.currentRestingPoint),
+    }
   }
   
   state = {
-    currentRestingPoint: HOME_POINT,
-  }
-
-  getRestingPointFromId = () => {
-    this.restingPoints.find(({ }))
+    currentRestingPoint: FULL,
   }
 
   handleAnimateTo = ({ point: { restingPoint }}) => {
     if (!restingPoint) return;
+    
+    const { restingPoints } = this.state;
     const { id } = restingPoint;
 
-    this.currentRestingPoint = this.restingPoints.find(rp => rp.id === id);
+    this.currentRestingPoint = restingPoints.find(rp => rp.id === id);
+
+    this.setState({
+      restingPoints: getValidRestingPoints(this.currentRestingPoint),
+    });
   }
 
   handleClick = (animateTo, draggableRef) => {
     const { id: restingPointId } = this.currentRestingPoint || {};
 
-    if (restingPointId === HOME_POINT.id) {
+    if (restingPointId === COLLAPSED.id) {
       animateTo({
-        position: getAwayPosition(draggableRef.current),
-        restingPoint: AWAY_POINT,
+        position: FULL.position,
+        restingPoint: FULL,
       });
     } else {
       animateTo({
-        position: HOME_POINT.position,
-        restingPoint: HOME_POINT,
+        position: getAwayPosition(draggableRef.current),
+        restingPoint: COLLAPSED,
       });
     }
   }
   
   render() {
+    const { restingPoints } = this.state;
+
     return (
       <Draggable
-        restingPoints={this.restingPoints}
+        restingPoints={restingPoints}
         axis={AXIS.Y}
         animationDuration={600}
         onAnimateTo={this.handleAnimateTo}
@@ -83,9 +98,10 @@ class DraggableCard extends Component {
 }
 
 const Card = styled.div`
-  width: 100px;
-  height: 100px;
-  background: red;
+  width: 100%;
+  height: 4000px;
+  background: darkgray;
+  border-radius: 12px;
   position: absolute;
 `;
 
