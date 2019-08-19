@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import SubscriptionManager from './subscriptionManager';
+import SubscriptionManager from './helpers/subscriptionManager';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 

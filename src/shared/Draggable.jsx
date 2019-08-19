@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import CappedArray from './cappedArray';
-import SubscriptionManager from './subscriptionManager';
-import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './draggableHelpers';
+import CappedArray from './helpers/cappedArray';
+import SubscriptionManager from './helpers/subscriptionManager';
+import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './helpers/draggableHelpers';
 import { fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { safelyCall } from './helpers';
+import { safelyCall } from './helpers/helpers';
 
 export const AXIS = {
   X: 'x',

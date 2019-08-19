@@ -1,36 +1,15 @@
 import React, { Component } from 'react';
-import Draggable, { AXIS } from './Draggable';
 import styled from '@emotion/styled';
-import ResizeHook from './ResizeHook';
-import Icon, { ICONS } from './Icon';
-
-const getAwayPosition = (el) => el.parentElement.clientHeight - 40;
-
-const FULL = {
-  id: 1,
-  position: 0,
-  gravity: 10,
-};
-
-const COLLAPSED = {
-  id: 2,
-  getPosition: getAwayPosition,
-  gravity: 10,
-};
-
-const HIDDEN = {
-  id: 3,
-  getPosition: () => window.document.body.clientHeight,
-  gravity: 10,
-};
-
-const ANIMATION_DURATION = 600;
-
-const iconStyle = { transition: `transform ${ANIMATION_DURATION}ms ease-in-out`};
+import Draggable, { AXIS } from '../../shared/Draggable';
+import ResizeHook from '../../shared/ResizeHook';
+import Icon, { ICONS } from '../../shared/Icon';
+import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
+import { ANIMATION_DURATION } from './constants';
+import VerseCard from './VerseCard';
 
 const getValidRestingPoints = current => current.id === 2 ? [FULL, COLLAPSED, HIDDEN] : [FULL, COLLAPSED]
 
-class DraggableCard extends Component {
+class DraggableVerseCard extends Component {
   constructor(props) {
     super(props);
 
@@ -114,14 +93,11 @@ class DraggableCard extends Component {
               Toggle
             </ButtonPrimary>
             <ResizeHook onResize={() => animateToClosestRestingPoint()} />
-            <Card ref={draggableRef} onClick={() => this.handleClick(animateTo, draggableRef)}>
-              <Icon
-                icon={ICONS.ANGLE_DOWN}
-                svgRef={this.iconRef}
-                style={iconStyle}
-                size={24}
-              />
-            </Card>
+            <VerseCard
+              draggableRef={draggableRef}
+              iconRef={this.iconRef}
+              handleClick={() => this.handleClick(animateTo, draggableRef)}
+            />
           </>
         )}
       </Draggable>
@@ -139,12 +115,12 @@ const ButtonPrimary = styled.button`
 
 const Card = styled.div`
   width: 100%;
-  height: 2000px;
-  padding: 8px;
+  min-height: 100vh;
+  padding: 14px;
   background: #8050C7;
   border-radius: 12px;
-  position: absolute;
+  position: fixed;
   color: white;
 `;
 
-export default DraggableCard;
+export default DraggableVerseCard;

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import DragContainer from './DragContainer';
-import DraggableCard from './DraggableCard';
+import DraggableVerseCard from './read/verseCard/DraggableVerseCard';
 
 class App extends Component {
   render() {
     return (
       <DragContainer>
-        <DraggableCard>
-          <span>Hello</span>
-        </DraggableCard>
+        <DraggableVerseCard />
       </DragContainer>
     );
   }
