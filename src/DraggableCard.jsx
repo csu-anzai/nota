@@ -53,8 +53,6 @@ class DraggableCard extends Component {
 
     if (!current) return;
 
-    console.log(current);
-    
     if (id === 1) {
       current.style.transform = "rotate(0deg)";
     } else {
