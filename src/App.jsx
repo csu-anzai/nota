@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import DragContainer from './DragContainer';
 import DraggableCard from './DraggableCard';
 

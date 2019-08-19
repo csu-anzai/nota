@@ -122,7 +122,7 @@ class Draggable extends Component {
     position = this.currentPosition,
   ) => {
     if (!point) return;
-    
+
     const { position: targetPosition } = point;
 
     if (!Number.isInteger(targetPosition) || !element) return;
@@ -178,6 +178,8 @@ class Draggable extends Component {
     const velocity = this.getVelocity();
 
     const restingPointResult = this.getClosestRestingPoint(element, position, velocity);
+
+    if (!restingPointResult) return;
     
     this.animateTo(
       restingPointResult,
