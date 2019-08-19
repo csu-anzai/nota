@@ -2,6 +2,7 @@ import React from 'react';
 import theme from '../../styles/theme';
 import styled from '@emotion/styled';
 import VerseCardHeader from './VerseCardHeader';
+import VerseCardBody from './VerseCardBody';
 // import { FULL } from './restingPoints';
 
 const VerseCard = ({
@@ -15,6 +16,7 @@ const VerseCard = ({
       iconRef={iconRef}
       handleClick={handleClick}
     />
+    <VerseCardBody />
   </VerseCardDiv>
 );
 
