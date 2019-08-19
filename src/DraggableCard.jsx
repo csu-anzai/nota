@@ -36,7 +36,7 @@ class DraggableCard extends Component {
     }
   }
 
-  getResintPoint = (id) => {
+  getRestingPoint = (id) => {
     const { restingPoints } = this.state;
     return restingPoints.find(rp => rp.id === id);
   }
