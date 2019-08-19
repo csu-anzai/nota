@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styled from '@emotion/styled';
 import Draggable, { AXIS } from '../../shared/Draggable';
 import ResizeHook from '../../shared/ResizeHook';
-import Icon, { ICONS } from '../../shared/Icon';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
 import { ANIMATION_DURATION } from './constants';
 import VerseCard from './VerseCard';
@@ -111,16 +110,6 @@ const ButtonPrimary = styled.button`
   background-color: #8050C7;
   color: white;
   border-radius: 4px;
-`;
-
-const Card = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  padding: 14px;
-  background: #8050C7;
-  border-radius: 12px;
-  position: fixed;
-  color: white;
 `;
 
 export default DraggableVerseCard;
