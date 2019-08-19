@@ -3,7 +3,7 @@ import CappedArray from './helpers/cappedArray';
 import SubscriptionManager from './helpers/subscriptionManager';
 import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './helpers/draggableHelpers';
 import { fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { safelyCall } from './helpers/helpers';
 
 export const AXIS = {
@@ -58,9 +58,20 @@ class Draggable extends Component {
 
     if (!current) return;
 
-    const touchStart$ = fromEvent(current, 'touchstart').pipe(map(toTouchEvent));
-    const touchEnd$ = fromEvent(current, 'touchend');
-    const touchMove$ = fromEvent(current, 'touchmove').pipe(map(toTouchEvent));
+    const touchStart$ = fromEvent(current, 'touchstart').pipe(
+      map(e => toTouchEvent(e, current)),
+      filter(e => e),
+    );
+
+    const touchEnd$ = fromEvent(current, 'touchend').pipe(
+      map(e => toTouchEvent(e, current)),
+      filter(e => e),
+    );
+
+    const touchMove$ = fromEvent(current, 'touchmove').pipe(
+      map(e => toTouchEvent(e, current)),
+      filter(e => e),
+    );
 
     this.observables = {
       touchStart$,
@@ -76,6 +87,7 @@ class Draggable extends Component {
   }
 
   handleTouchStart = (e) => {
+    console.log(e);
     const { current } = this.draggableRef;
     
     if (!current) return;
