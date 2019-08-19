@@ -35,18 +35,18 @@ class DraggableCard extends Component {
       restingPoints: getValidRestingPoints(this.currentRestingPoint),
     }
   }
-  
-  state = {
-    currentRestingPoint: FULL,
+
+  getResintPoint = (id) => {
+    const { restingPoints } = this.state;
+    return restingPoints.find(rp => rp.id === id);
   }
 
   handleAnimateTo = ({ point: { restingPoint }}) => {
     if (!restingPoint) return;
     
-    const { restingPoints } = this.state;
     const { id } = restingPoint;
 
-    this.currentRestingPoint = restingPoints.find(rp => rp.id === id);
+    this.currentRestingPoint = this.getRestingPoint(id);
 
     this.setState({
       restingPoints: getValidRestingPoints(this.currentRestingPoint),
