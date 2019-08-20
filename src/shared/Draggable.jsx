@@ -94,7 +94,6 @@ class Draggable extends Component {
   }
 
   handleTouchStart = (e) => {
-    console.log(e);
     const { current } = this.draggableRef;
     
     if (!current) return;
