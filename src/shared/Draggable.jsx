@@ -11,6 +11,13 @@ export const AXIS = {
   Y: 'y',
 };
 
+export const DIRECTION = {
+  UP: 'up',
+  DOWN: 'down',
+};
+
+const { UP, DOWN } = DIRECTION;
+
 const DEFAULT_AXIS = AXIS.Y;
 const DEFAULT_STARTING_POSITION = 0;
 const DEFAULT_ANIMATION_MS = 600;
@@ -112,10 +119,28 @@ class Draggable extends Component {
   }
 
   move = (delta) => {
+    const isMoveable = this.getIsMoveable(delta);
+
+    if (!isMoveable) return;
+
     this.deltas.push(delta);
 
     this.updatePosition(this.currentPosition + delta);
   }
+
+  getIsMoveable = (delta) => {
+    const { isMoveable } = this.props;
+    if (!isMoveable) return true;
+
+    const isMoveableArgs = this.getMoveableArgs(delta);
+
+    return isMoveable(isMoveableArgs);
+  }
+
+  getMoveableArgs = (delta) => ({
+    delta,
+    direction: delta > 0 ? DOWN : UP,
+  });
 
   updatePosition = (pos) => {
     const { current } = this.draggableRef;

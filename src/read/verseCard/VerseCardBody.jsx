@@ -3,10 +3,10 @@ import VerseCardVerseDisplay from './VerseCardVerseDisplay';
 import VerseCardContent from './VerseCardContent';
 import styled from '@emotion/styled';
 
-const VerseCardBody = () => (
+const VerseCardBody = ({ scrollerRef }) => (
   <VerseCardBodyContainer>
     <VerseCardVerseDisplay />
-    <VerseCardContent />
+    <VerseCardContent scrollerRef={scrollerRef} />
   </VerseCardBodyContainer>
 );
 

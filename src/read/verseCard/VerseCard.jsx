@@ -9,6 +9,7 @@ const VerseCard = ({
   draggableRef,
   handleClick,
   iconRef,
+  scrollerRef,
   // currentRestingPoint = FULL,
 }) => (
   <VerseCardDiv ref={draggableRef}>
@@ -16,7 +17,7 @@ const VerseCard = ({
       iconRef={iconRef}
       handleClick={handleClick}
     />
-    <VerseCardBody />
+    <VerseCardBody scrollerRef={scrollerRef} />
   </VerseCardDiv>
 );
 

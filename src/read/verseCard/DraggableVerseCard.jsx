@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
-import Draggable, { AXIS } from '../../shared/Draggable';
+import Draggable, { AXIS, DIRECTION } from '../../shared/Draggable';
 import ResizeHook from '../../shared/ResizeHook';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
 import { ANIMATION_DURATION } from './constants';
 import VerseCard from './VerseCard';
+
+const { UP } = DIRECTION;
 
 const getValidRestingPoints = current => current.id === 2 ? [FULL, COLLAPSED, HIDDEN] : [FULL, COLLAPSED]
 
@@ -13,6 +15,8 @@ class DraggableVerseCard extends Component {
     super(props);
 
     this.iconRef = React.createRef();
+
+    this.scrollerRef = React.createRef();
     
     this.currentRestingPoint = FULL;
 
@@ -71,6 +75,19 @@ class DraggableVerseCard extends Component {
       });
     }
   }
+
+  isMoveable = ({ direction }) => {
+    const { current } = this.scrollerRef;
+    if (!current) return true;
+
+    if (this.currentRestingPoint.id !== 1) return true;
+
+    const scrollerIsAtTop = current.scrollTop < 1;
+
+    if (direction === UP || !scrollerIsAtTop) return false;
+
+    return true;
+  }
   
   render() {
     const { restingPoints } = this.state;
@@ -81,6 +98,7 @@ class DraggableVerseCard extends Component {
         axis={AXIS.Y}
         animationDuration={ANIMATION_DURATION}
         onAnimateTo={this.handleAnimateTo}
+        isMoveable={this.isMoveable}
       >
         {({ draggableRef, animateTo, animateToClosestRestingPoint }) => (
           <>
@@ -94,6 +112,7 @@ class DraggableVerseCard extends Component {
             <ResizeHook onResize={() => animateToClosestRestingPoint()} />
             <VerseCard
               draggableRef={draggableRef}
+              scrollerRef={this.scrollerRef}
               iconRef={this.iconRef}
               handleClick={() => this.handleClick(animateTo, draggableRef)}
             />

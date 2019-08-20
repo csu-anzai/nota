@@ -5,8 +5,13 @@ import { safelyCall } from '../../shared/helpers/helpers';
 
 const preventDefault = (e) => { safelyCall(e.stopPropagation.bind(e)); }
 
-const VerseCardContent = () => (
-  <VerseCardContentContainer onTouchStart={preventDefault} onTouchEnd={preventDefault} onTouchMove={preventDefault}>
+const VerseCardContent = ({ scrollerRef }) => (
+  <VerseCardContentContainer
+    ref={scrollerRef}
+    onTouchStart={preventDefault}
+    onTouchEnd={preventDefault}
+    onTouchMove={preventDefault}
+  >
     <VerseCardContentWindow />
     <VerseCardContentTextContainer>
       Pancetta chicken tongue pork belly, ball tip drumstick flank pastrami spare ribs doner. Kielbasa tail bresaola flank. Ham hock pastrami shoulder sausage ribeye t-bone pork loin. Ball tip alcatra burgdoggen shank, buffalo jerky salami swine picanha chuck ground round tri-tip capicola meatloaf beef ribs.
