@@ -76,7 +76,10 @@ class DraggableVerseCard extends Component {
     }
   }
 
-  isMoveable = ({ direction }) => {
+  isMoveable = ({ event, direction }) => {
+    console.log(event);
+    if (event.target.classList.contains('draggable')) return true;
+    
     const { current } = this.scrollerRef;
     if (!current) return true;
 

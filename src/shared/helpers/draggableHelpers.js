@@ -10,7 +10,7 @@ export const toTouchEvent = (e, current) => {
 
   const { screenX, screenY } = mainTouch;
   
-  return { x: screenX, y: screenY };
+  return { x: screenX, y: screenY, target: e.target };
 };
 
 export const getWinningRestingPoint = (args) => {

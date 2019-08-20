@@ -107,7 +107,9 @@ class Draggable extends Component {
     if (this.lastTouchPosition) {
       const delta = touchPosition - this.lastTouchPosition;
 
-      this.move(delta);
+      const isMoveable = this.getIsMoveable(e, delta);
+
+      if (isMoveable) this.move(delta);
     }
 
     this.lastTouchPosition = touchPosition;
@@ -118,25 +120,22 @@ class Draggable extends Component {
   }
 
   move = (delta) => {
-    const isMoveable = this.getIsMoveable(delta);
-
-    if (!isMoveable) return;
-
     this.deltas.push(delta);
 
     this.updatePosition(this.currentPosition + delta);
   }
 
-  getIsMoveable = (delta) => {
+  getIsMoveable = (e, delta) => {
     const { isMoveable } = this.props;
     if (!isMoveable) return true;
 
-    const isMoveableArgs = this.getMoveableArgs(delta);
+    const isMoveableArgs = this.getMoveableArgs(e, delta);
 
     return isMoveable(isMoveableArgs);
   }
 
-  getMoveableArgs = (delta) => ({
+  getMoveableArgs = (e, delta) => ({
+    event: e,
     delta,
     direction: delta > 0 ? DOWN : UP,
   });
