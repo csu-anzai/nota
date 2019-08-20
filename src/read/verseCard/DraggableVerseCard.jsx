@@ -38,7 +38,7 @@ class DraggableVerseCard extends Component {
     if (id === 1) {
       current.style.transform = "rotate(0deg)";
     } else {
-      current.style.transform = "rotate(180deg)";
+      current.style.transform = "rotate(-180deg)";
     }
   }
 
