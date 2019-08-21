@@ -2,17 +2,22 @@ import React from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import { safelyCall } from '../../shared/helpers/helpers';
+import VerseCardContentWindow from './VerseCardContentWindow';
 
 const preventDefault = (e) => { safelyCall(e.stopPropagation.bind(e)); }
 
-const VerseCardContent = ({ scrollerRef }) => (
+const VerseCardContent = ({
+  verse,
+  scrollerRef,
+}) => (
+  // TODO: remove the handlers
   <VerseCardContentContainer
     ref={scrollerRef}
     onTouchStart={preventDefault}
     onTouchEnd={preventDefault}
     onTouchMove={preventDefault}
   >
-    <VerseCardContentWindow />
+    <VerseCardContentWindow verse={verse} />
     <VerseCardContentTextContainer>
       Pancetta chicken tongue pork belly, ball tip drumstick flank pastrami spare ribs doner. Kielbasa tail bresaola flank. Ham hock pastrami shoulder sausage ribeye t-bone pork loin. Ball tip alcatra burgdoggen shank, buffalo jerky salami swine picanha chuck ground round tri-tip capicola meatloaf beef ribs.
 
@@ -37,10 +42,6 @@ const VerseCardContentContainer = styled.div`
   bottom: 0;
   z-index: 2;
   overflow-y: auto;
-`;
-
-const VerseCardContentWindow = styled.div`
-  height: 200px;
 `;
 
 const VerseCardContentTextContainer = styled.div`

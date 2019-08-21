@@ -1,23 +1,43 @@
 import React from 'react';
 import Icon, { ICONS } from '../../shared/Icon';
 import { ANIMATION_DURATION } from './constants';
+import { Button } from '../../shared/Html';
+import styled from '@emotion/styled';
 
 const containerStyle = { padding: 14 };
 
 const iconStyle = { transition: `transform ${ANIMATION_DURATION}ms ease-in-out`};
 
-// TODO: handle click
 const VerseCardHeader = ({
+  verse,
   iconRef,
+  handleClick,
 }) => (
   <div style={containerStyle} className="draggable">
-    <Icon
-      icon={ICONS.ANGLE_DOWN}
-      svgRef={iconRef}
-      style={iconStyle}
-      size={24}
-    />
+    <VerseTitleButton
+      type="button"
+      onClick={handleClick}
+      className="draggable"
+    >
+      <Icon
+        icon={ICONS.ANGLE_DOWN}
+        svgRef={iconRef}
+        style={iconStyle}
+        size={24}
+      />
+      {verse.title}
+    </VerseTitleButton>
   </div>
 );
+
+const VerseTitleButton = styled(Button)`
+  font-size: 18px;
+  font-weight: 500;
+
+  svg {
+    margin-right: 6px;
+    margin-top: -4px;
+  }
+`;
 
 export default VerseCardHeader;

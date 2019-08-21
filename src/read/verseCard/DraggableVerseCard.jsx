@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import Draggable, { AXIS, DIRECTION } from '../../shared/Draggable';
 import ResizeHook from '../../shared/ResizeHook';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
-import { ANIMATION_DURATION } from './constants';
+import { ANIMATION_DURATION, verse } from './constants';
 import VerseCard from './VerseCard';
 
 const { UP } = DIRECTION;
@@ -118,6 +118,7 @@ class DraggableVerseCard extends Component {
               scrollerRef={this.scrollerRef}
               iconRef={this.iconRef}
               handleClick={() => this.handleClick(animateTo, draggableRef)}
+              verse={verse}
             />
           </>
         )}

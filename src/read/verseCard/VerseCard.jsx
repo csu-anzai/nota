@@ -6,6 +6,7 @@ import VerseCardBody from './VerseCardBody';
 // import { FULL } from './restingPoints';
 
 const VerseCard = ({
+  verse,
   draggableRef,
   handleClick,
   iconRef,
@@ -14,10 +15,14 @@ const VerseCard = ({
 }) => (
   <VerseCardDiv ref={draggableRef}>
     <VerseCardHeader
+      verse={verse}
       iconRef={iconRef}
       handleClick={handleClick}
     />
-    <VerseCardBody scrollerRef={scrollerRef} />
+    <VerseCardBody
+      verse={verse}
+      scrollerRef={scrollerRef}
+    />
   </VerseCardDiv>
 );
 

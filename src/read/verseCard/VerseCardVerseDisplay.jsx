@@ -2,19 +2,21 @@ import React from 'react';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 
-const VerseCardVerseDisplay = () => (
-  <VerseDisplay>
-    The man’s name was Elimelech, and his wife’s name was Naomi. The names of his two sons were Mahlon and Chilion. They were Ephrathites from Bethlehem in Judah. They entered the land of Moab and settled there.
-  </VerseDisplay>
+const VerseCardVerseDisplay = ({ verse }) => (
+  <VerseDisplay>{verse.text}</VerseDisplay>
 );
 
-const VerseDisplay = styled.div`
+export const VerseDisplayText = styled.div`
+  padding: 0 16px;
+  font-size: 20px;
+  line-height: 30px;
+`;
+
+const VerseDisplay = styled(VerseDisplayText)`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  padding: 16px;
-  font-size: 1.4em;
   color: ${theme.textOnPrimary};
 `;
 
