@@ -4,8 +4,6 @@ import { ANIMATION_DURATION } from './constants';
 import { Button } from '../../shared/Html';
 import styled from '@emotion/styled';
 
-const containerStyle = { padding: 14 };
-
 const iconStyle = { transition: `transform ${ANIMATION_DURATION}ms ease-in-out`};
 
 const VerseCardHeader = ({
@@ -13,7 +11,7 @@ const VerseCardHeader = ({
   iconRef,
   handleClick,
 }) => (
-  <div style={containerStyle} className="draggable">
+  <div className="draggable">
     <VerseTitleButton
       type="button"
       onClick={handleClick}
@@ -33,6 +31,7 @@ const VerseCardHeader = ({
 const VerseTitleButton = styled(Button)`
   font-size: 18px;
   font-weight: 500;
+  padding: 14px;
 
   svg {
     margin-right: 6px;
