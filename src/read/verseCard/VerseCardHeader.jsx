@@ -32,6 +32,7 @@ const VerseTitleButton = styled(Button)`
   font-size: 18px;
   font-weight: 500;
   padding: 14px;
+  line-height: 26px;
 
   svg {
     margin-right: 6px;

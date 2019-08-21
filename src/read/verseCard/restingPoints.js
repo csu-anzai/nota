@@ -1,4 +1,4 @@
-const COLLAPSED_HEIGHT = 55;
+const COLLAPSED_HEIGHT = 54;
 
 export const getAwayPosition = (el) => el.parentElement.clientHeight - COLLAPSED_HEIGHT;
 
