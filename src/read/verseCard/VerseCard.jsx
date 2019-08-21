@@ -11,9 +11,9 @@ const VerseCard = ({
   handleClick,
   iconRef,
   scrollerRef,
-  // currentRestingPoint = FULL,
+  currentRestingPoint,
 }) => (
-  <VerseCardDiv ref={draggableRef}>
+  <VerseCardDiv ref={draggableRef} currentRestingPoint={currentRestingPoint}>
     <VerseCardHeader
       verse={verse}
       iconRef={iconRef}
@@ -31,11 +31,14 @@ const VerseCardDiv = styled.div`
   flex-direction: column;
   width: 100%;
   min-height: 120vh;
-  border-radius: 12px;
   position: absolute;
   background: ${theme.primary};
   color: ${theme.textOnPrimary};
   pointer-events: all;
+  border-radius: 12px;
+  /* TODO: Make a better strategy here */
+  transition: box-shadow 1000ms ease-out;
+  box-shadow: ${({ currentRestingPoint }) => currentRestingPoint.id === 1 ? `0px 0px 0px 12px ${theme.primary}` : `none`}; 
 `;
 
 export default VerseCard;

@@ -78,7 +78,6 @@ class DraggableVerseCard extends Component {
   }
 
   isMoveable = ({ event, direction }) => {
-    console.log(event);
     if (event.target.classList.contains('draggable')) return true;
     
     const { current } = this.scrollerRef;
@@ -95,7 +94,7 @@ class DraggableVerseCard extends Component {
   }
   
   render() {
-    const { restingPoints } = this.state;
+    const { restingPoints, currentRestingPoint } = this.state;
 
     return (
       <Draggable
@@ -121,6 +120,7 @@ class DraggableVerseCard extends Component {
               iconRef={this.iconRef}
               handleClick={() => this.handleClick(animateTo, draggableRef)}
               verse={verse}
+              currentRestingPoint={currentRestingPoint}
             />
           </>
         )}
