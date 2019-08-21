@@ -18,10 +18,9 @@ class DraggableVerseCard extends Component {
 
     this.scrollerRef = React.createRef();
     
-    this.currentRestingPoint = FULL;
-
     this.state = {
-      restingPoints: getValidRestingPoints(this.currentRestingPoint),
+      restingPoints: getValidRestingPoints(FULL),
+      currentRestingPoint: FULL,
     }
   }
 
@@ -43,12 +42,13 @@ class DraggableVerseCard extends Component {
   }
 
   setCurrentRestingPoint = (id) => {
-    this.currentRestingPoint = this.getRestingPoint(id);
+    const currentRestingPoint = this.getRestingPoint(id);
 
-    this.setIconStyle(this.currentRestingPoint);
+    this.setIconStyle(currentRestingPoint);
 
     this.setState({
-      restingPoints: getValidRestingPoints(this.currentRestingPoint),
+      currentRestingPoint,
+      restingPoints: getValidRestingPoints(currentRestingPoint),
     });
   }
 
@@ -61,7 +61,8 @@ class DraggableVerseCard extends Component {
   }
 
   handleClick = (animateTo, draggableRef) => {
-    const { id: restingPointId } = this.currentRestingPoint || {};
+    const { currentRestingPoint } = this.state;
+    const { id: restingPointId } = currentRestingPoint || {};
 
     if (restingPointId === COLLAPSED.id) {
       animateTo({
@@ -83,7 +84,8 @@ class DraggableVerseCard extends Component {
     const { current } = this.scrollerRef;
     if (!current) return true;
 
-    if (this.currentRestingPoint.id !== 1) return true;
+    const { currentRestingPoint } = this.state;
+    if (currentRestingPoint.id !== 1) return true;
 
     const scrollerIsAtTop = current.scrollTop < 1;
 
