@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
-import DragContainer from './DragContainer';
-import DraggableVerseCard from './read/verseCard/DraggableVerseCard';
+import Navigation from './root/Navigation';
+import Content from './root/Content';
 
 class App extends Component {
+  state = {
+    navigationIsOpen: false,
+    subnavigationIsOpen: false,
+  }
+
   render() {
     return (
-      <DragContainer>
-        <DraggableVerseCard />
-      </DragContainer>
+      <>
+        <Navigation {...this.state} />
+        <Content {...this.state} />
+      </>
     );
   }
 }

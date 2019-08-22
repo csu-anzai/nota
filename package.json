@@ -6,6 +6,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.7",
     "@emotion/styled": "^10.0.15",
+    "@reach/router": "^1.2.1",
     "emotion": "^10.0.14",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
