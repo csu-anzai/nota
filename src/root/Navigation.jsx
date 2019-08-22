@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import Link from '../shared/Link';
-import PATHS from '../shared/constants/paths';
 import { Button } from '../shared/Html';
 import Icon, { ICONS } from '../shared/Icon';
+import { routes } from '../shared/constants/routes';
 
 const Navigation = ({
   toggleNavigation,
@@ -20,8 +20,8 @@ const Navigation = ({
       </Button>
       {navigationIsOpen && (
         <div>
-          <Link to={PATHS.HOME}>Home</Link>
-          <Link to={PATHS.READ}>Read</Link>
+          <Link to={routes.home.action()}>Home</Link>
+          <Link to={routes.read.action()}>Read</Link>
         </div>
       )}
     </NavigationContainer>

@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Home from '../home/Home';
 import Read from '../read/Read';
-import { routeTypes } from '../shared/constants/routes';
+import { routes } from '../shared/constants/routes';
 
 const Content = ({ path }) => {
   switch (path) {
     // case routeTypes.HOME:
     //   return <Home />;
-    case routeTypes.READ:
+    case routes.read.type:
       return <Read />;
     default:
       return <Home />;

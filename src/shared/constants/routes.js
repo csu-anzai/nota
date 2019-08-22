@@ -1,15 +1,23 @@
-export const routeTypes = {
-  HOME: 'HOME',
-  READ: 'READ',
-  READ_BOOK: 'READ_BOOK',
-  READ_CHAPTER: 'READ_CHAPTER',
-  READ_VERSE: 'READ_VERSE',
+export const routes = {
+  home: {
+    type: 'HOME',
+    path: '/',
+    action: () => ({ type: 'HOME' }),
+  },
+  read: {
+    type: 'READ',
+    path: '/read',
+    action: () => ({ type: 'READ'}),
+  },
+  readBook: {
+    type: 'READ_BOOK',
+    path: '/read/:bookId',
+    action: ({ bookId }) => ({ type: 'READ_BOOK', payload: { bookId } }),
+  },
 };
 
-export const routesMap = {
-  [routeTypes.HOME]: '/',
-  [routeTypes.READ]: '/read',
-  [routeTypes.READ_BOOK]: '/read/:bookId',
-  [routeTypes.READ_CHAPTER]: '/read/:bookId/:chapterId',
-  [routeTypes.READ_VERSE]: '/read/:bookId/:chapterId/:verseId',
-};
+export const routesMap = Object.keys(routes).reduce((acc, routesKey) => {
+  const route = routes[routesKey];
+  acc[route.type] = route.path;
+  return acc;
+}, {});
