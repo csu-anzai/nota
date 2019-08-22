@@ -1,16 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import { connectRoutes } from 'redux-first-router'
 import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
-
-export const routeTypes = {
-  HOME: 'HOME',
-  READ: 'READ',
-}
-
-export const routesMap = {
-  [routeTypes.HOME]: '/',
-  [routeTypes.READ]: '/read',
-};
+import { routesMap } from './shared/constants/routes';
 
 const configureStore = (preloadedState) => {
   const { reducer, middleware, enhancer } = connectRoutes(routesMap)
