@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import Link from '../shared/Link';
 import { Button } from '../shared/Html';
 import Icon, { ICONS } from '../shared/Icon';
-import { routes } from '../shared/constants/routes';
+import routes from '../shared/constants/routes';
 
 const Navigation = ({
   toggleNavigation,

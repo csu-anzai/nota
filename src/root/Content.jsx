@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Home from '../home/Home';
 import Read from '../read/Read';
-import { routes } from '../shared/constants/routes';
+import routes from '../shared/constants/routes';
 
 const Content = ({ path }) => {
   switch (path) {

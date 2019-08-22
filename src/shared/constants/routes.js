@@ -1,4 +1,4 @@
-export const routes = {
+const routes = {
   home: {
     type: 'HOME',
     path: '/',
@@ -21,3 +21,5 @@ export const routesMap = Object.keys(routes).reduce((acc, routesKey) => {
   acc[route.type] = route.path;
   return acc;
 }, {});
+
+export default routes;
