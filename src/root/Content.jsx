@@ -1,19 +1,18 @@
 import React from 'react';
-import { Router } from '@reach/router';
-import PATHS from '../shared/constants/paths';
+import { connect } from 'react-redux';
 import Home from '../home/Home';
 import Read from '../read/Read';
-import styled from '@emotion/styled';
+import { routeTypes } from '../configureStore';
 
-const Content = () => (
-  <RouterContainer>
-    <Home path={PATHS.HOME} />
-    <Read path={PATHS.READ} />
-  </RouterContainer>
-);
+const Content = ({ path }) => {
+  switch (path) {
+    // case routeTypes.HOME:
+    //   return <Home />;
+    case routeTypes.READ:
+      return <Read />;
+    default:
+      return <Home />;
+  }
+};
 
-const RouterContainer = styled(Router)`
-  height: 100%;
-`;
-
-export default Content;
+export default connect(state => ({ path: state.location.type }))(Content);

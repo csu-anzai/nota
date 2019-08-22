@@ -1,11 +1,13 @@
 import React from 'react';
-import DragContainer from '../DragContainer';
 import DraggableVerseCard from './verseCard/DraggableVerseCard';
+import CardContainer from '../shared/CardContainer';
 
 const Read = () => (
-  <DragContainer>
-    <DraggableVerseCard />
-  </DragContainer>
+  <>
+    <CardContainer path="verse">
+      <DraggableVerseCard />
+    </CardContainer>
+  </>
 );
 
 export default Read;
