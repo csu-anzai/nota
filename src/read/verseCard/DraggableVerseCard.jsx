@@ -44,6 +44,8 @@ class DraggableVerseCard extends Component {
       ref,
     });
 
+    this.draggable.animateToRestingPoint(COLLAPSED);
+
     console.log(this.draggable);
   }
 

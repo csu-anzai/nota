@@ -22,7 +22,7 @@ export const getWinningRestingPoint = (args) => {
     if (score > target.score) return { score, position, restingPoint };
 
     return target;
-  }, { score: 0, position: 0, restingPoint: null });
+  }, { score: -1000, position: 0, restingPoint: null });
   
   return restingPointResult;
 };
@@ -36,7 +36,9 @@ const getRestingPointScore = (
   if (Number.isInteger(maybeRestingPointPosition)) restingPointPosition = maybeRestingPointPosition;
   else if (typeof getPosition === 'function') restingPointPosition = getPosition(element);
 
-  if (!position) return { score: 0, restingPointPosition: 0 };
+  console.log('rpp', restingPointPosition, position);
+
+  if (typeof position !== 'number') return { score: 0, restingPointPosition: 0 };
 
   return {
     score: (gravity / Math.abs(restingPointPosition - (position + velocity * slideEffect))),

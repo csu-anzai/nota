@@ -36,7 +36,7 @@ class Draggable {
     } = props;
     
     this.axis = axis;
-    this.currentPosition = startingPosition;
+    this.currentPosition = startingPosition || 0;
     
     this.lastTouchPosition = null;
     this.deltas = new CappedArray(3);
@@ -176,14 +176,16 @@ class Draggable {
   }
 
   getClosestRestingPoint = (
+    restingPoints = this.restingPoints,
     element = this.ref,
     position = this.currentPosition,
     velocity = this.getVelocity(),
   ) => {
     const {
-      restingPoints,
       slideEffect,
     } = this;
+
+    console.log('getCloses', restingPoints);
 
     if (!restingPoints) return;
 
@@ -195,6 +197,7 @@ class Draggable {
       element,
     });
 
+    console.log('getCloses', restingPointResult);
     return restingPointResult;
   }
 
@@ -202,14 +205,15 @@ class Draggable {
     this.restingPoints = restingPoints;
   }
   
-  animateToClosestRestingPoint = () => {
+  animateToClosestRestingPoint = (restingPoints = this.restingPoints) => {
+    console.log('bloahh');
     const { animationDuration } = this;
     const element = this.ref;
     const position = this.currentPosition;
     const velocity = this.getVelocity();
 
-    const restingPointResult = this.getClosestRestingPoint(element, position, velocity);
-
+    const restingPointResult = this.getClosestRestingPoint(restingPoints, element, position, velocity);
+    console.log(restingPointResult);
     if (!restingPointResult) return;
     
     this.animateTo(
@@ -219,6 +223,10 @@ class Draggable {
       velocity,
       position,
     );
+  }
+
+  animateToRestingPoint = (restingPoint) => {
+    this.animateToClosestRestingPoint([restingPoint]);
   }
 
   getVelocity = () => {
