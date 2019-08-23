@@ -185,8 +185,6 @@ class Draggable {
       slideEffect,
     } = this;
 
-    console.log('getCloses', restingPoints);
-
     if (!restingPoints) return;
 
     const restingPointResult = getWinningRestingPoint({
@@ -197,7 +195,6 @@ class Draggable {
       element,
     });
 
-    console.log('getCloses', restingPointResult);
     return restingPointResult;
   }
 
@@ -206,14 +203,12 @@ class Draggable {
   }
   
   animateToClosestRestingPoint = (restingPoints = this.restingPoints) => {
-    console.log('bloahh');
     const { animationDuration } = this;
     const element = this.ref;
     const position = this.currentPosition;
     const velocity = this.getVelocity();
 
     const restingPointResult = this.getClosestRestingPoint(restingPoints, element, position, velocity);
-    console.log(restingPointResult);
     if (!restingPointResult) return;
     
     this.animateTo(

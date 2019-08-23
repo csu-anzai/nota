@@ -36,8 +36,6 @@ const getRestingPointScore = (
   if (Number.isInteger(maybeRestingPointPosition)) restingPointPosition = maybeRestingPointPosition;
   else if (typeof getPosition === 'function') restingPointPosition = getPosition(element);
 
-  console.log('rpp', restingPointPosition, position);
-
   if (typeof position !== 'number') return { score: 0, restingPointPosition: 0 };
 
   return {
