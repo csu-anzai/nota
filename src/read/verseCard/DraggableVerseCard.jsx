@@ -24,12 +24,13 @@ class DraggableVerseCard extends Component {
     }
   }
 
-  // componentDidUpdate(prevProps) {
-  //   const { verseId } = this.props;
-  //   const { verseId: prevVerseId } = prevProps;
+  componentDidUpdate(prevProps) {
+    const { verseId } = this.props;
+    const { verseId: prevVerseId } = prevProps;
 
-  //   if (!prevVerseId && verseId) 
-  // }
+    if (!prevVerseId && verseId) this.draggable.animateToRestingPoint(COLLAPSED);
+    if (prevVerseId && !verseId) this.draggable.animateToClosestRestingPoint(HIDDEN);
+  }
 
   initDraggable = (ref) => {
     console.log(ref);
@@ -44,7 +45,7 @@ class DraggableVerseCard extends Component {
       ref,
     });
 
-    this.draggable.animateToRestingPoint(COLLAPSED);
+    if (this.props.verseId) this.draggable.animateToRestingPoint(COLLAPSED);
 
     console.log(this.draggable);
   }
