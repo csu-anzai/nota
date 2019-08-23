@@ -40,7 +40,7 @@ class DraggableVerseCard extends Component {
       restingPoints,
       animationDuration: ANIMATION_DURATION,
       onAnimateTo: this.handleAnimateTo,
-      isMoveable: this.isMoveable,
+      getIsMoveable: this.isMoveable,
       ref,
     });
 
@@ -69,13 +69,19 @@ class DraggableVerseCard extends Component {
 
     this.setIconStyle(currentRestingPoint);
 
+    const newRestingPoints = getValidRestingPoints(currentRestingPoint)
+
     this.setState({
       currentRestingPoint,
-      restingPoints: getValidRestingPoints(currentRestingPoint),
+      restingPoints: newRestingPoints,
     });
+
+    this.draggable.setRestingPoints(newRestingPoints);
   }
 
   handleAnimateTo = ({ point: { restingPoint }}) => {
+    console.log(restingPoint);
+    
     if (!restingPoint) return;
     
     const { id } = restingPoint;

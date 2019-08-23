@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import CappedArray from './helpers/cappedArray';
 import SubscriptionManager from './helpers/subscriptionManager';
 import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './helpers/draggableHelpers';
@@ -32,6 +31,8 @@ class Draggable {
       restingPoints,
       animationDuration = DEFAULT_ANIMATION_MS,
       slideEffect = DEFAULT_SLIDE_EFFECT,
+      onAnimateTo,
+      getIsMoveable,
     } = props;
     
     this.axis = axis;
@@ -47,6 +48,9 @@ class Draggable {
     this.restingPoints = restingPoints;
     this.animationDuration = animationDuration;
     this.slideEffect = slideEffect;
+
+    this.getIsMoveable = getIsMoveable;
+    this.onAnimateTo = onAnimateTo;
 
     this.init();
   }
@@ -107,7 +111,6 @@ class Draggable {
       const delta = touchPosition - this.lastTouchPosition;
 
       const isMoveable = !this.getIsMoveable || this.getIsMoveable(this.getMoveableArgs(e, delta));
-
       if (isMoveable) this.move(delta);
     }
 
@@ -193,6 +196,10 @@ class Draggable {
     });
 
     return restingPointResult;
+  }
+
+  setRestingPoints = (restingPoints) => {
+    this.restingPoints = restingPoints;
   }
   
   animateToClosestRestingPoint = () => {
