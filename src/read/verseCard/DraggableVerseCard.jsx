@@ -31,6 +31,22 @@ class DraggableVerseCard extends Component {
   //   if (!prevVerseId && verseId) 
   // }
 
+  initDraggable = (ref) => {
+    console.log(ref);
+    const { restingPoints } = this.state;
+    
+    this.draggable = new Draggable({
+      axis: AXIS.Y,
+      restingPoints,
+      animationDuration: ANIMATION_DURATION,
+      onAnimateTo: this.handleAnimateTo,
+      isMoveable: this.isMoveable,
+      ref,
+    });
+
+    console.log(this.draggable);
+  }
+
   getRestingPoint = (id) => {
     const { restingPoints } = this.state;
     return restingPoints.find(rp => rp.id === id);
@@ -67,18 +83,18 @@ class DraggableVerseCard extends Component {
     this.setCurrentRestingPoint(id);
   }
 
-  handleClick = (animateTo, draggableRef) => {
+  handleClick = () => {
     const { currentRestingPoint } = this.state;
     const { id: restingPointId } = currentRestingPoint || {};
 
     if (restingPointId === COLLAPSED.id) {
-      animateTo({
+      this.draggable.animateTo({
         position: FULL.position,
         restingPoint: FULL,
       });
     } else {
-      animateTo({
-        position: getAwayPosition(draggableRef.current),
+      this.draggable.animateTo({
+        position: getAwayPosition(this.draggable.ref),
         restingPoint: COLLAPSED,
       });
     }
@@ -99,39 +115,33 @@ class DraggableVerseCard extends Component {
 
     return true;
   }
-  
+
+  onResize = () => {
+    this.draggable.animateToClosestRestingPoint();
+  }
+
   render() {
-    const { restingPoints, currentRestingPoint } = this.state;
+    const { currentRestingPoint } = this.state;
 
     return (
-      <Draggable
-        restingPoints={restingPoints}
-        axis={AXIS.Y}
-        animationDuration={ANIMATION_DURATION}
-        onAnimateTo={this.handleAnimateTo}
-        isMoveable={this.isMoveable}
-      >
-        {({ draggableRef, animateTo, animateToClosestRestingPoint }) => (
-          <>
-            {/* <ButtonPrimary
-              onClick={() => this.handleClick(animateTo, draggableRef)}
-              type="button"
-              style={{ position: 'absolute', top: 8, right: 8 }}
-            >
-              Toggle
-            </ButtonPrimary> */}
-            <ResizeHook onResize={() => animateToClosestRestingPoint()} />
-            <VerseCard
-              draggableRef={draggableRef}
-              scrollerRef={this.scrollerRef}
-              iconRef={this.iconRef}
-              handleClick={() => this.handleClick(animateTo, draggableRef)}
-              verse={verse}
-              currentRestingPoint={currentRestingPoint}
-            />
-          </>
-        )}
-      </Draggable>
+      <>
+        {/* <ButtonPrimary
+          onClick={() => this.handleClick(animateTo, draggableRef)}
+          type="button"
+          style={{ position: 'absolute', top: 8, right: 8 }}
+        >
+          Toggle
+        </ButtonPrimary> */}
+        <ResizeHook onResize={this.onResize} />
+        <VerseCard
+          draggableRef={this.initDraggable}
+          scrollerRef={this.scrollerRef}
+          iconRef={this.iconRef}
+          handleClick={this.handleClick}
+          verse={verse}
+          currentRestingPoint={currentRestingPoint}
+        />
+      </>
     )
   };
 }

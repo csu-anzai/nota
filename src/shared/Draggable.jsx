@@ -23,13 +23,15 @@ const DEFAULT_STARTING_POSITION = 0;
 const DEFAULT_ANIMATION_MS = 600;
 const DEFAULT_SLIDE_EFFECT = 15; 
 
-class Draggable extends Component {
+class Draggable {
   constructor(props) {
-    super(props);
-
     const {
       axis = DEFAULT_AXIS,
       startingPosition = DEFAULT_STARTING_POSITION,
+      ref,
+      restingPoints,
+      animationDuration = DEFAULT_ANIMATION_MS,
+      slideEffect = DEFAULT_SLIDE_EFFECT,
     } = props;
     
     this.axis = axis;
@@ -40,43 +42,34 @@ class Draggable extends Component {
 
     this.observables = null;
     this.subscriptions = null;
+    this.ref = ref;
 
-    this.draggableRef = React.createRef();
-  }
+    this.restingPoints = restingPoints;
+    this.animationDuration = animationDuration;
+    this.slideEffect = slideEffect;
 
-  componentDidMount() {
     this.init();
-  }
-
-  componentDidUpdate() {
-    this.init();
-  }
-
-  componentWillUnmount() {
-    if (!this.subscriptions) return;
-    
-    this.subscriptions.unsubscribe();
   }
 
   init = () => {
     if (this.observables || this.subscriptions) return;
 
-    const { current } = this.draggableRef || {};
+    const { ref } = this;
 
-    if (!current) return;
+    if (!ref) return;
 
-    const touchStart$ = fromEvent(current, 'touchstart').pipe(
-      map(e => toTouchEvent(e, current)),
+    const touchStart$ = fromEvent(ref, 'touchstart').pipe(
+      map(e => toTouchEvent(e, ref)),
       filter(e => e),
     );
 
-    const touchEnd$ = fromEvent(current, 'touchend').pipe(
-      map(e => toTouchEvent(e, current)),
+    const touchEnd$ = fromEvent(ref, 'touchend').pipe(
+      map(e => toTouchEvent(e, ref)),
       filter(e => e),
     );
 
-    const touchMove$ = fromEvent(current, 'touchmove').pipe(
-      map(e => toTouchEvent(e, current)),
+    const touchMove$ = fromEvent(ref, 'touchmove').pipe(
+      map(e => toTouchEvent(e, ref)),
       filter(e => e),
     );
 
@@ -93,12 +86,18 @@ class Draggable extends Component {
     });
   }
 
-  handleTouchStart = (e) => {
-    const { current } = this.draggableRef;
+  destroy = () => {
+    if (!this.subscriptions) return;
     
-    if (!current) return;
+    this.subscriptions.unsubscribe();
+  }
+
+  handleTouchStart = () => {
+    const { ref } = this;
     
-    current.style.transition = '';
+    if (!ref) return;
+    
+    ref.style.transition = '';
   }
 
   handleTouchMove = (e) => {
@@ -107,7 +106,7 @@ class Draggable extends Component {
     if (this.lastTouchPosition) {
       const delta = touchPosition - this.lastTouchPosition;
 
-      const isMoveable = this.getIsMoveable(e, delta);
+      const isMoveable = !this.getIsMoveable || this.getIsMoveable(this.getMoveableArgs(e, delta));
 
       if (isMoveable) this.move(delta);
     }
@@ -125,15 +124,6 @@ class Draggable extends Component {
     this.updatePosition(this.currentPosition + delta);
   }
 
-  getIsMoveable = (e, delta) => {
-    const { isMoveable } = this.props;
-    if (!isMoveable) return true;
-
-    const isMoveableArgs = this.getMoveableArgs(e, delta);
-
-    return isMoveable(isMoveableArgs);
-  }
-
   getMoveableArgs = (e, delta) => ({
     event: e,
     delta,
@@ -141,18 +131,18 @@ class Draggable extends Component {
   });
 
   updatePosition = (pos) => {
-    const { current } = this.draggableRef;
-    if (!current) return;
+    const { ref } = this;
+    if (!ref) return;
 
-    current.style.transform = `translate${this.axis.toUpperCase()}(${pos}px)`;
+    ref.style.transform = `translate${this.axis.toUpperCase()}(${pos}px)`;
 
     this.currentPosition = pos;
   }
 
   animateTo = (
     point,
-    animationDuration = (this.props.animationDuration || DEFAULT_ANIMATION_MS),
-    element = this.draggableRef.current,
+    animationDuration = this.animationDuration,
+    element = this.ref,
     velocity = this.getVelocity(),
     position = this.currentPosition,
   ) => {
@@ -171,8 +161,7 @@ class Draggable extends Component {
     this.deltas.clear();
     this.lastTouchPosition = null;
 
-    const { onAnimateTo } = this.props;
-    safelyCall(onAnimateTo, {
+    safelyCall(this.onAnimateTo, {
       point,
       animationDuration,
       element,
@@ -184,14 +173,14 @@ class Draggable extends Component {
   }
 
   getClosestRestingPoint = (
-    element = this.draggableRef.current,
+    element = this.ref,
     position = this.currentPosition,
     velocity = this.getVelocity(),
   ) => {
     const {
       restingPoints,
-      slideEffect = DEFAULT_SLIDE_EFFECT,
-    } = this.props;
+      slideEffect,
+    } = this;
 
     if (!restingPoints) return;
 
@@ -207,8 +196,8 @@ class Draggable extends Component {
   }
   
   animateToClosestRestingPoint = () => {
-    const { animationDuration = DEFAULT_ANIMATION_MS } = this.props;
-    const element = this.draggableRef.current;
+    const { animationDuration } = this;
+    const element = this.ref;
     const position = this.currentPosition;
     const velocity = this.getVelocity();
 
@@ -227,17 +216,6 @@ class Draggable extends Component {
 
   getVelocity = () => {
     return getVelocity(this.deltas.get());
-  }
-
-  render() {
-    const { children } = this.props;
-
-    return children({
-      draggableRef: this.draggableRef,
-      animateTo: this.animateTo,
-      getClosestRestingPoint: this.getClosestRestingPoint,
-      animateToClosestRestingPoint: this.animateToClosestRestingPoint,
-    });
   }
 }
 
