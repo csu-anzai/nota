@@ -19,10 +19,17 @@ class DraggableVerseCard extends Component {
     this.scrollerRef = React.createRef();
     
     this.state = {
-      restingPoints: getValidRestingPoints(FULL),
-      currentRestingPoint: FULL,
+      restingPoints: getValidRestingPoints(HIDDEN),
+      currentRestingPoint: HIDDEN,
     }
   }
+
+  // componentDidUpdate(prevProps) {
+  //   const { verseId } = this.props;
+  //   const { verseId: prevVerseId } = prevProps;
+
+  //   if (!prevVerseId && verseId) 
+  // }
 
   getRestingPoint = (id) => {
     const { restingPoints } = this.state;
@@ -106,13 +113,13 @@ class DraggableVerseCard extends Component {
       >
         {({ draggableRef, animateTo, animateToClosestRestingPoint }) => (
           <>
-            <ButtonPrimary
+            {/* <ButtonPrimary
               onClick={() => this.handleClick(animateTo, draggableRef)}
               type="button"
               style={{ position: 'absolute', top: 8, right: 8 }}
             >
               Toggle
-            </ButtonPrimary>
+            </ButtonPrimary> */}
             <ResizeHook onResize={() => animateToClosestRestingPoint()} />
             <VerseCard
               draggableRef={draggableRef}

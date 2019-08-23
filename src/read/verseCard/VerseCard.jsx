@@ -39,6 +39,7 @@ const VerseCardDiv = styled.div`
   /* TODO: Make a better strategy here */
   transition: box-shadow 1000ms ease-out;
   box-shadow: ${({ currentRestingPoint }) => currentRestingPoint.id === 1 ? `0px 0px 0px 12px ${theme.primary}` : `none`}; 
+  top: 100%;
 `;
 
 export default VerseCard;

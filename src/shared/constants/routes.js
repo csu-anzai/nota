@@ -12,7 +12,17 @@ const routes = {
   readBook: {
     type: 'READ_BOOK',
     path: '/read/:bookId',
-    action: ({ bookId }) => ({ type: 'READ_BOOK', payload: { bookId } }),
+    action: payload => ({ type: 'READ_BOOK', payload }),
+  },
+  readChapter: {
+    type: 'READ_CHAPTER',
+    path: '/read/:bookId/:chapterId',
+    action: payload => ({ type: 'READ_CHAPTER', payload }),
+  },
+  readVerse: {
+    type: 'READ_VERSE',
+    path: '/read/:bookId/:chapterId/:verseId',
+    action: payload => ({ type: 'READ_VERSE', payload }),
   },
 };
 

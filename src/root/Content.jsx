@@ -9,6 +9,9 @@ const Content = ({ path }) => {
     // case routeTypes.HOME:
     //   return <Home />;
     case routes.read.type:
+    case routes.readBook.type:
+    case routes.readChapter.type:
+    case routes.readVerse.type:
       return <Read />;
     default:
       return <Home />;

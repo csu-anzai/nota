@@ -1,7 +1,9 @@
-import Link from 'redux-first-router-link';
+import RouterLink from 'redux-first-router-link';
 import styled from '@emotion/styled';
 import theme from '../styles/theme';
 
-export default styled(Link)`
+const Link = styled(RouterLink)`
   color: ${theme.primary};
 `;
+
+export default Link;
