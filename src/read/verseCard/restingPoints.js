@@ -16,6 +16,6 @@ export const COLLAPSED = {
 
 export const HIDDEN = {
   id: 3,
-  getPosition: () => window.document.body.clientHeight,
+  getPosition: () => window.innerHeight,
   gravity: 10,
 };

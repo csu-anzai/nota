@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
-import Draggable, { AXIS, DIRECTION } from '../../shared/Draggable';
+import Draggable, { AXIS, DIRECTION } from '../../shared/helpers/draggable';
 import ResizeHook from '../../shared/ResizeHook';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
 import { ANIMATION_DURATION, verse } from './constants';
@@ -42,12 +42,11 @@ class DraggableVerseCard extends Component {
       animationDuration: ANIMATION_DURATION,
       onAnimateTo: this.handleAnimateTo,
       getIsMoveable: this.isMoveable,
+      startingPosition: HIDDEN.getPosition(),
       ref,
     });
 
     if (this.props.verseId) this.draggable.animateToRestingPoint(COLLAPSED);
-
-    console.log(this.draggable);
   }
 
   getRestingPoint = (id) => {

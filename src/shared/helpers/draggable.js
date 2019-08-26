@@ -1,9 +1,9 @@
-import CappedArray from './helpers/cappedArray';
-import SubscriptionManager from './helpers/subscriptionManager';
-import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './helpers/draggableHelpers';
+import CappedArray from './cappedArray';
+import SubscriptionManager from './subscriptionManager';
+import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './draggableHelpers';
 import { fromEvent } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
-import { safelyCall } from './helpers/helpers';
+import { safelyCall } from './helpers';
 
 export const AXIS = {
   X: 'x',
@@ -88,6 +88,8 @@ class Draggable {
       handleTouchMove: touchMove$.subscribe(this.handleTouchMove),
       handleTouchEnd: touchEnd$.subscribe(this.handleTouchEnd),
     });
+
+    this.updatePosition(this.currentPosition);
   }
 
   destroy = () => {
@@ -171,6 +173,16 @@ class Draggable {
       velocity,
       position,
     });
+
+    setTimeout(() => {
+      safelyCall(this.onAnimateToCompleted, {
+        point,
+        animationDuration,
+        element,
+        velocity,
+        position,
+      });
+    }, animationDuration);
 
     this.updatePosition(targetPosition);
   }
