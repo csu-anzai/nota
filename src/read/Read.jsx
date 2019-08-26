@@ -17,9 +17,11 @@ const Read = ({ verseId }) => (
         </Link>
       </ContentCard>
     </CardContainer>
-    <CardContainer path="verse">
-      <DraggableVerseCard verseId={verseId} />
-    </CardContainer>
+    {verseId && (
+      <CardContainer path="verse">
+        <DraggableVerseCard verseId={verseId} />
+      </CardContainer>
+    )}
   </>
 );
 

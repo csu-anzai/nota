@@ -32,6 +32,7 @@ class Draggable {
       animationDuration = DEFAULT_ANIMATION_MS,
       slideEffect = DEFAULT_SLIDE_EFFECT,
       onAnimateTo,
+      onAnimateToCompleted,
       getIsMoveable,
     } = props;
     
@@ -51,6 +52,7 @@ class Draggable {
 
     this.getIsMoveable = getIsMoveable;
     this.onAnimateTo = onAnimateTo;
+    this.onAnimateToCompleted = onAnimateToCompleted;
 
     this.init();
   }
@@ -197,7 +199,7 @@ class Draggable {
       slideEffect,
     } = this;
 
-    if (!restingPoints || !element) return;
+    if (!Array.isArray(restingPoints) || !element) return null;
 
     const restingPointResult = getWinningRestingPoint({
       restingPoints,

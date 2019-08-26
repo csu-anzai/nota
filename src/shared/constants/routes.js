@@ -1,3 +1,5 @@
+import { getBookId, getChapterId } from "../helpers/locationHelpers";
+
 const routes = {
   home: {
     type: 'HOME',
@@ -17,12 +19,14 @@ const routes = {
   readChapter: {
     type: 'READ_CHAPTER',
     path: '/read/:bookId/:chapterId',
-    action: payload => ({ type: 'READ_CHAPTER', payload }),
+    action: ({ bookId = getBookId(), chapterId = getChapterId() } = {}) =>
+      ({ type: 'READ_CHAPTER', payload: { bookId, chapterId } }),
   },
   readVerse: {
     type: 'READ_VERSE',
     path: '/read/:bookId/:chapterId/:verseId',
-    action: payload => ({ type: 'READ_VERSE', payload }),
+    action: ({ bookId = getBookId(), chapterId = getChapterId(), verseId } = {}) => 
+      ({ type: 'READ_VERSE', payload: { bookId, chapterId, verseId } }),
   },
 };
 

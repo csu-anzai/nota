@@ -4,6 +4,8 @@ import ResizeHook from '../../shared/ResizeHook';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
 import { ANIMATION_DURATION, verse } from './constants';
 import VerseCard from './VerseCard';
+import routes from '../../shared/constants/routes';
+import { goTo } from '../../shared/helpers/locationHelpers';
 
 const { UP } = DIRECTION;
 
@@ -16,6 +18,8 @@ class DraggableVerseCard extends Component {
     this.iconRef = React.createRef();
 
     this.scrollerRef = React.createRef();
+
+    this.draggable = null;
     
     this.state = {
       restingPoints: getValidRestingPoints(HIDDEN),
@@ -23,12 +27,8 @@ class DraggableVerseCard extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { verseId } = this.props;
-    const { verseId: prevVerseId } = prevProps;
-
-    if (!prevVerseId && verseId) this.draggable.animateToRestingPoint(COLLAPSED);
-    if (prevVerseId && !verseId) this.draggable.animateToClosestRestingPoint(HIDDEN);
+  componentWillUnmount() {
+    this.draggable.destroy();
   }
 
   initDraggable = (ref) => {
@@ -40,6 +40,7 @@ class DraggableVerseCard extends Component {
       restingPoints,
       animationDuration: ANIMATION_DURATION,
       onAnimateTo: this.handleAnimateTo,
+      onAnimateToCompleted: this.handleAnimateToCompleted,
       getIsMoveable: this.isMoveable,
       startingPosition: HIDDEN.getPosition(),
       ref,
@@ -81,13 +82,18 @@ class DraggableVerseCard extends Component {
   }
 
   handleAnimateTo = ({ point: { restingPoint }}) => {
-    console.log(restingPoint);
-    
-    if (!restingPoint) return;
-    
     const { id } = restingPoint;
 
     this.setCurrentRestingPoint(id);
+  }
+
+  handleAnimateToCompleted = ({ point: { restingPoint }}) => {
+    const { id } = restingPoint;
+
+    if (id === 3) {
+      console.log('readChapter');
+      goTo(routes.readChapter.action());
+    }
   }
 
   handleClick = () => {
