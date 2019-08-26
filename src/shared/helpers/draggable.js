@@ -197,7 +197,7 @@ class Draggable {
       slideEffect,
     } = this;
 
-    if (!restingPoints) return;
+    if (!restingPoints || !element) return;
 
     const restingPointResult = getWinningRestingPoint({
       restingPoints,

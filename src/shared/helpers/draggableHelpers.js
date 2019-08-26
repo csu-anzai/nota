@@ -31,6 +31,7 @@ const getRestingPointScore = (
   { position: maybeRestingPointPosition, getPosition, gravity },
   { position, velocity, slideEffect, element },
 ) => {
+  if (!element) return { score: -1, position: 0 };
   let restingPointPosition = null;
 
   if (Number.isInteger(maybeRestingPointPosition)) restingPointPosition = maybeRestingPointPosition;

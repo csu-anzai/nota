@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from '@emotion/styled';
 import Draggable, { AXIS, DIRECTION } from '../../shared/helpers/draggable';
 import ResizeHook from '../../shared/ResizeHook';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
@@ -153,13 +152,5 @@ class DraggableVerseCard extends Component {
     )
   };
 }
-
-const ButtonPrimary = styled.button`
-  padding: 8px 12px;
-  min-width: 80px;
-  background-color: #8050C7;
-  color: white;
-  border-radius: 4px;
-`;
 
 export default DraggableVerseCard;
