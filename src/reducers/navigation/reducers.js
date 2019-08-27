@@ -13,4 +13,16 @@ const isMainNavOpen = (
   }
 };
 
-export default combineReducers({ isMainNavOpen });
+const isBookNavOpen = (
+  state = false,
+  action,
+) => {
+  switch (action.type) {
+    case actionTypes.TOGGLE_IS_BOOK_NAV_OPEN:
+      return !state;
+    default: 
+      return state;
+  }
+};
+
+export default combineReducers({ isMainNavOpen, isBookNavOpen });

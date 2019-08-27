@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
-import Navigation from './root/Navigation';
+import Navigation from './root/navigation/Navigation';
 import Content from './root/Content';
 
 class App extends Component {

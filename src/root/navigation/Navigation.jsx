@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { connect } from 'react-redux';
-import Link from '../shared/Link';
-import { Button } from '../shared/Html';
-import Icon, { ICONS } from '../shared/Icon';
-import routes from '../shared/constants/routes';
-import * as navigationActions from '../reducers/navigation/actions';
+import { Button } from '../../shared/Html';
+import Icon, { ICONS } from '../../shared/Icon';
+import * as navigationActions from '../../reducers/navigation/actions';
+import MainNavigation from './MainNavigation';
+import ReadNavigation from './ReadNavigation';
 
 const Navigation = ({
   toggleIsMainNavOpen,
+  toggleIsBookNavOpen,
   isMainNavOpen,
+  isBookNavOpen,
   children,
 }) => (
   <>
@@ -20,12 +22,14 @@ const Navigation = ({
       >
         <Icon icon={ICONS.MENU} />
       </Button>
-      {isMainNavOpen && (
-        <div>
-          <Link to={routes.home.action()}>Home</Link>
-          <Link to={routes.read.action()}>Read</Link>
-        </div>
-      )}
+      <Button
+        type="button"
+        onClick={toggleIsBookNavOpen}
+      >
+        <Icon icon={ICONS.ANGLE_DOWN} />
+      </Button>
+      {isMainNavOpen && <MainNavigation />}
+      {isBookNavOpen && <ReadNavigation />}
     </NavigationContainer>
     {children}
   </>
@@ -38,10 +42,12 @@ const NavigationContainer = styled.div`
 
 const mapStateToProps = state => ({
   isMainNavOpen: state.navigation.isMainNavOpen,
+  isBookNavOpen: state.navigation.isBookNavOpen
 });
 
 const actions = {
   toggleIsMainNavOpen: navigationActions.toggleIsMainNavOpen,
+  toggleIsBookNavOpen: navigationActions.toggleIsBookNavOpen,
 };
 
 export default connect(mapStateToProps, actions)(Navigation);

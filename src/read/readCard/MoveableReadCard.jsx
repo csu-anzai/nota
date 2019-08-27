@@ -11,8 +11,9 @@ class MoveableReadCard extends Component {
   state = {}
 
   getTop = () => {
-    // const { isMainNavOpen } = this.props;
-    // if ()
+    const { isBookNavOpen } = this.props;
+
+    if (isBookNavOpen) return window.innerHeight;
     return DEFAULT_READ_CARD_TOP;
   }
 
@@ -48,6 +49,7 @@ class MoveableReadCard extends Component {
 
 const mapStateToProps = state => ({
   isMainNavOpen: state.navigation.isMainNavOpen,
+  isBookNavOpen: state.navigation.isBookNavOpen,
 });
 
 export default connect(mapStateToProps)(MoveableReadCard);
