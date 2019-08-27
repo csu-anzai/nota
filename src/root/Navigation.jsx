@@ -1,24 +1,26 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { connect } from 'react-redux';
 import Link from '../shared/Link';
 import { Button } from '../shared/Html';
 import Icon, { ICONS } from '../shared/Icon';
 import routes from '../shared/constants/routes';
+import * as navigationActions from '../reducers/navigation/actions';
 
 const Navigation = ({
-  toggleNavigation,
-  navigationIsOpen,
+  toggleIsMainNavOpen,
+  isMainNavOpen,
   children,
 }) => (
   <>
     <NavigationContainer>
       <Button
         type="button"
-        onClick={toggleNavigation}
+        onClick={toggleIsMainNavOpen}
       >
         <Icon icon={ICONS.MENU} />
       </Button>
-      {navigationIsOpen && (
+      {isMainNavOpen && (
         <div>
           <Link to={routes.home.action()}>Home</Link>
           <Link to={routes.read.action()}>Read</Link>
@@ -34,4 +36,12 @@ const NavigationContainer = styled.div`
   height: 40px;
 `;
 
-export default Navigation;
+const mapStateToProps = state => ({
+  isMainNavOpen: state.navigation.isMainNavOpen,
+});
+
+const actions = {
+  toggleIsMainNavOpen: navigationActions.toggleIsMainNavOpen,
+};
+
+export default connect(mapStateToProps, actions)(Navigation);

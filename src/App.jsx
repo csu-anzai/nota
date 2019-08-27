@@ -4,23 +4,12 @@ import Navigation from './root/Navigation';
 import Content from './root/Content';
 
 class App extends Component {
-  state = {
-    navigationIsOpen: false,
-    subnavigationIsOpen: false,
-  }
-
-  toggleNavigation = () => {
-    this.setState(({ navigationIsOpen }) => ({ navigationIsOpen: !navigationIsOpen }));
-  }
+  state = {}
 
   render() {
     return (
       <AppContainer>
-        <Navigation
-          setState={this.setState} 
-          toggleNavigation={this.toggleNavigation}
-          {...this.state}
-        />
+        <Navigation />
         <Content {...this.state} />
       </AppContainer>
     );
