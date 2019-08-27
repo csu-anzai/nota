@@ -8,6 +8,8 @@ const isMainNavOpen = (
   switch (action.type) {
     case actionTypes.TOGGLE_IS_MAIN_NAV_OPEN:
       return !state;
+    case actionTypes.TOGGLE_IS_BOOK_NAV_OPEN:
+      return false;
     default:
       return state;
   }
@@ -20,6 +22,8 @@ const isBookNavOpen = (
   switch (action.type) {
     case actionTypes.TOGGLE_IS_BOOK_NAV_OPEN:
       return !state;
+    case actionTypes.TOGGLE_IS_MAIN_NAV_OPEN:
+      return false;
     default: 
       return state;
   }
