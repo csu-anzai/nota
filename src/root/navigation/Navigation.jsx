@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
 import { Button } from '../../shared/Html';
 import Icon, { ICONS } from '../../shared/Icon';
@@ -32,8 +33,22 @@ const Navigation = ({
         Mark 4
         <Icon icon={ICONS.ANGLE_DOWN} size={24} style={bookIconStyle} />
       </NavIconButton>
-      {isMainNavOpen && <MainNavigation close={toggleIsMainNavOpen} />}
-      {isBookNavOpen && <ReadNavigation close={toggleIsBookNavOpen} />}
+      <CSSTransition
+        in={isMainNavOpen}
+        timeout={200}
+        classNames="navigationItems"
+        unmountOnExit
+      >
+        <MainNavigation close={toggleIsMainNavOpen} />
+      </CSSTransition>
+      <CSSTransition
+        in={isBookNavOpen}
+        timeout={200}
+        classNames="navigationItems"
+        unmountOnExit
+      >
+        <ReadNavigation close={toggleIsBookNavOpen} />
+      </CSSTransition>
     </NavigationContainer>
     {children}
   </>
