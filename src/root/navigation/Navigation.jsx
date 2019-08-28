@@ -7,6 +7,9 @@ import * as navigationActions from '../../reducers/navigation/actions';
 import MainNavigation from './MainNavigation';
 import ReadNavigation from './ReadNavigation';
 
+const menuIconStyle = { marginTop: -6 };
+const bookIconStyle = { marginTop: -4, marginLeft: 4 };
+
 const Navigation = ({
   toggleIsMainNavOpen,
   toggleIsBookNavOpen,
@@ -16,20 +19,21 @@ const Navigation = ({
 }) => (
   <>
     <NavigationContainer>
-      <Button
+      <NavIconButton
         type="button"
         onClick={toggleIsMainNavOpen}
       >
-        <Icon icon={ICONS.MENU} />
-      </Button>
-      <Button
+        <Icon icon={ICONS.MENU} size={24} style={menuIconStyle} />
+      </NavIconButton>
+      <NavIconButton
         type="button"
         onClick={toggleIsBookNavOpen}
       >
-        <Icon icon={ICONS.ANGLE_DOWN} />
-      </Button>
-      {isMainNavOpen && <MainNavigation />}
-      {isBookNavOpen && <ReadNavigation />}
+        Mark 4
+        <Icon icon={ICONS.ANGLE_DOWN} size={24} style={bookIconStyle} />
+      </NavIconButton>
+      {isMainNavOpen && <MainNavigation close={toggleIsMainNavOpen} />}
+      {isBookNavOpen && <ReadNavigation close={toggleIsBookNavOpen} />}
     </NavigationContainer>
     {children}
   </>
@@ -37,7 +41,14 @@ const Navigation = ({
 
 const NavigationContainer = styled.div`
   color: white;
-  height: 40px;
+  height: 50px;
+`;
+
+const NavIconButton = styled(Button)`
+  height: 50px;
+  padding: 0 12px;
+  font-size: 18px;
+  line-height: 50px;
 `;
 
 const mapStateToProps = state => ({
