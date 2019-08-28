@@ -6,6 +6,7 @@ import routes from '../../shared/constants/routes';
 
 const DEFAULT_READ_CARD_TOP = 50;
 const DEFAULT_READ_CARD_LEFT = 0;
+const DEFAULT_READ_CARD_NAV_OFFSET = 100;
 
 class MoveableReadCard extends Component {
   state = {}
@@ -20,7 +21,7 @@ class MoveableReadCard extends Component {
   getLeft = () => {
     const { isMainNavOpen } = this.props;
 
-    if (isMainNavOpen) return window.innerWidth;
+    if (isMainNavOpen) return Math.min(window.innerWidth - DEFAULT_READ_CARD_NAV_OFFSET, 300);
     return DEFAULT_READ_CARD_LEFT;
   }
 

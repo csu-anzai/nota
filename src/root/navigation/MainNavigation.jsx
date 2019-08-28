@@ -1,11 +1,11 @@
 import React from 'react';
-import Link from '../../shared/Link';
+import NavigationLink from './NavigationLink';
 import routes from '../../shared/constants/routes';
 
 const MainNavigation = ({ close }) => (
   <div>
-    <Link to={routes.home.action()} onClick={close}>Home</Link>
-    <Link to={routes.read.action()} onClick={close}>Read</Link>
+    <NavigationLink to={routes.home.action()} onClick={close}>Home</NavigationLink>
+    <NavigationLink to={routes.read.action()} onClick={close}>Read</NavigationLink>
   </div>
 );
 
