@@ -1,4 +1,4 @@
-import { safelyCall } from './helpers';
+import { safelyCall } from './functionHelpers';
 
 const unsubscribeFrom = (subscriptions, key) => {
   const subscription = subscriptions[key];

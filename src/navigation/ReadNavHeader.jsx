@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import * as navigationActions from '../../reducers/navigation/actions';
-import routes, { activeRouteMap } from '../../shared/constants/routes';
-import { BOOK_DETAILS } from '../../shared/constants/books';
+import * as navigationActions from '../reducers/navigation/actions';
+import routes, { activeRouteMap } from '../shared/constants/routes';
+import { BOOK_DETAILS } from '../shared/constants/books';
 import NavigationIconButton from './NavigationIconButton';
-import Icon, { ICONS } from '../../shared/Icon';
+import Icon, { ICONS } from '../shared/Icon';
 
 const bookIconStyle = { marginTop: -4, marginLeft: 4 };
 

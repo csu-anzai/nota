@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
-import Navigation from './root/navigation/Navigation';
-import Content from './root/Content';
+import Navigation from '../navigation/Navigation';
+import Content from './Content';
 
 class App extends Component {
   state = {}
@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <AppContainer>
         <Navigation />
-        <Content {...this.state} />
+        <Content />
       </AppContainer>
     );
   }

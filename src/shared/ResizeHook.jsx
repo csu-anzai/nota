@@ -3,6 +3,8 @@ import SubscriptionManager from './helpers/subscriptionManager';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
+const RESIZE_DEBOUNCE_TIME = 100;
+
 class ResizeHook extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +14,7 @@ class ResizeHook extends Component {
   
   componentDidMount() {
     const resize$ = fromEvent(window, 'resize').pipe(
-      debounceTime(100),
+      debounceTime(RESIZE_DEBOUNCE_TIME),
     );
 
     const resizeSubscription = resize$.subscribe(this.handleResize);

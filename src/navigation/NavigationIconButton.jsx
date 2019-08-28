@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button } from '../../shared/Html';
+import { Button } from '../shared/Html';
 
 const NavigationIconButton = styled(Button)`
   height: 50px;

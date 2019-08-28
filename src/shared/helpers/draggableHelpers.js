@@ -1,10 +1,7 @@
 const APPROX_MAX_DIFFERENCE = 20;
 
-export const toTouchEvent = (e, current) => {
+export const toTouchEvent = (e) => {
   const mainTouch = e.touches[0];
-  // e.preventDefault();
-  // e.stopPropagation();
-
 
   if (!mainTouch) return {};
 

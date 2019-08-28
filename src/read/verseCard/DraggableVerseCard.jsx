@@ -32,7 +32,6 @@ class DraggableVerseCard extends Component {
   }
 
   initDraggable = (ref) => {
-    console.log(ref);
     const { restingPoints } = this.state;
     
     this.draggable = new Draggable({
@@ -91,7 +90,6 @@ class DraggableVerseCard extends Component {
     const { id } = restingPoint;
 
     if (id === 3) {
-      console.log('readChapter');
       goTo(routes.readChapter.action());
     }
   }

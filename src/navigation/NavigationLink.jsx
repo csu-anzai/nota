@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { NavLink } from 'redux-first-router-link';
-import theme from '../../styles/theme';
+import theme from '../styles/theme';
 
 const NavigationLink = styled(NavLink)`
   display: block;

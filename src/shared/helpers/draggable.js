@@ -3,7 +3,7 @@ import SubscriptionManager from './subscriptionManager';
 import { getVelocity, getWinningRestingPoint, getBezierHandle, toTouchEvent } from './draggableHelpers';
 import { fromEvent } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
-import { safelyCall } from './helpers';
+import { safelyCall } from './functionHelpers';
 
 export const AXIS = {
   X: 'x',

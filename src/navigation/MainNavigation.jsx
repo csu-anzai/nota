@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import NavigationLink from './NavigationLink';
-import routes, { activeRouteMap } from '../../shared/constants/routes';
+import routes, { activeRouteMap } from '../shared/constants/routes';
 
 const MainNavigation = ({ close, locationType }) => {
   const { type } = activeRouteMap[locationType];

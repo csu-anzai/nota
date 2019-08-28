@@ -6,8 +6,6 @@ const ContentCard = styled.div`
   height: 100%;
   width: 100%;
   position: absolute;
-  /* top: 50px; */
-  /* transform: translateY(0) translateX(0); */
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
   pointer-events: all;
