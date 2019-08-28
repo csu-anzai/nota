@@ -1,13 +1,18 @@
 import styled from '@emotion/styled';
-import Link from '../../shared/Link';
+import { NavLink } from 'redux-first-router-link';
+import theme from '../../styles/theme';
 
-const NavigationLink = styled(Link)`
+const NavigationLink = styled(NavLink)`
   display: block;
   padding: 12px 16px;
-  color: white;
   text-decoration: none;
   font-weight: 500;
   font-size: 18px;
+  color: ${theme.blank};
+
+  &.active {
+    background-color: ${theme.primary};
+  }
 `;
 
 export default NavigationLink;
