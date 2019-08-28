@@ -15,23 +15,23 @@ const routes = {
   },
   readBook: {
     type: 'READ_BOOK',
-    path: '/read/:bookId',
+    path: '/read/:bookName',
     getActiveRoute: () => routes.read,
     action: payload => ({ type: 'READ_BOOK', payload }),
   },
   readChapter: {
     type: 'READ_CHAPTER',
-    path: '/read/:bookId/:chapterId',
+    path: '/read/:bookName/:chapterId',
     getActiveRoute: () => routes.read,
-    action: ({ bookId = getBookId(), chapterId = getChapterId() } = {}) =>
-      ({ type: 'READ_CHAPTER', payload: { bookId, chapterId } }),
+    action: ({ bookName = getBookId(), chapterId = getChapterId() } = {}) =>
+      ({ type: 'READ_CHAPTER', payload: { bookName, chapterId } }),
   },
   readVerse: {
     type: 'READ_VERSE',
-    path: '/read/:bookId/:chapterId/:verseId',
+    path: '/read/:bookName/:chapterId/:verseId',
     getActiveRoute: () => routes.read,
-    action: ({ bookId = getBookId(), chapterId = getChapterId(), verseId } = {}) => 
-      ({ type: 'READ_VERSE', payload: { bookId, chapterId, verseId } }),
+    action: ({ bookName = getBookId(), chapterId = getChapterId(), verseId } = {}) => 
+      ({ type: 'READ_VERSE', payload: { bookName, chapterId, verseId } }),
   },
 };
 

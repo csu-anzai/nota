@@ -40,7 +40,7 @@ class MoveableReadCard extends Component {
         }}
       >
         Lorem ipsum
-        <Link to={routes.readVerse.action({ chapterId: 1, bookId: 1, verseId: 1 })}>
+        <Link to={routes.readVerse.action({ bookName: 'genesis', chapterId: 1, verseId: 1 })}>
           Read verse
         </Link>
       </ContentCard>

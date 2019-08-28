@@ -2,14 +2,14 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
-import { Button } from '../../shared/Html';
 import Icon, { ICONS } from '../../shared/Icon';
 import * as navigationActions from '../../reducers/navigation/actions';
 import MainNavigation from './MainNavigation';
 import ReadNavigation from './ReadNavigation';
+import NavigationIconButton from './NavigationIconButton';
+import ReadNavHeader from './ReadNavHeader';
 
 const menuIconStyle = { marginTop: -6 };
-const bookIconStyle = { marginTop: -4, marginLeft: 4 };
 
 const Navigation = ({
   toggleIsMainNavOpen,
@@ -20,19 +20,15 @@ const Navigation = ({
 }) => (
   <>
     <NavigationContainer>
-      <NavIconButton
+      <NavigationIconButton
         type="button"
         onClick={toggleIsMainNavOpen}
       >
         <Icon icon={ICONS.MENU} size={24} style={menuIconStyle} />
-      </NavIconButton>
-      <NavIconButton
-        type="button"
-        onClick={toggleIsBookNavOpen}
-      >
-        Mark 4
-        <Icon icon={ICONS.ANGLE_DOWN} size={24} style={bookIconStyle} />
-      </NavIconButton>
+      </NavigationIconButton>
+      <ReadNavHeader
+        toggleIsBookNavOpen={toggleIsBookNavOpen}
+      />
       <CSSTransition
         in={isMainNavOpen}
         timeout={200}
@@ -57,13 +53,6 @@ const Navigation = ({
 const NavigationContainer = styled.div`
   color: white;
   height: 50px;
-`;
-
-const NavIconButton = styled(Button)`
-  height: 50px;
-  padding: 0 12px;
-  font-size: 18px;
-  line-height: 50px;
 `;
 
 const mapStateToProps = state => ({
