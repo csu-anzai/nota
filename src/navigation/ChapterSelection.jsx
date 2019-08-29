@@ -5,7 +5,6 @@ import Icon, { ICONS } from '../shared/Icon';
 import { BOOK_DETAILS } from '../shared/constants/books';
 import routes from '../shared/constants/routes';
 import styled from '@emotion/styled';
-import NavigationLink from './NavigationLink';
 import theme from '../styles/theme';
 
 const ChapterSelection = ({
