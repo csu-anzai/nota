@@ -10,6 +10,8 @@ const configureStore = (preloadedState) => {
     basename: '/bn-react',
   });
 
+  console.log('1032');
+
   const rootReducer = combineReducers({ location: reducer, ...reducers })
   const middlewares = applyMiddleware(middleware)
   const enhancers = composeWithDevTools(compose(enhancer, middlewares))
