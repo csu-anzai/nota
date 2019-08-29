@@ -10,6 +10,8 @@ const ContentCard = styled.div`
   border-top-left-radius: 12px;
   pointer-events: all;
   transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  overflow-y: auto;
+  padding-bottom: 50px;
 `;
 
 export default ContentCard;

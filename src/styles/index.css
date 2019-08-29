@@ -22,6 +22,20 @@ html, body, #root {
   height: 100%;
 }
 
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+  }
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* ::-webkit-scrollbar-thumb {
+  background: #FF0000;
+} */
+
 .navigationItems-enter {
 	opacity: 0.01;
 }
@@ -40,3 +54,19 @@ html, body, #root {
 	transition: all .2s ease-out;
 }
 
+.verse {
+  padding: 5px;
+  line-height: 1.4em;
+  font-size: 18px;
+}
+
+.verseNumber {
+  line-height: 17px;
+  font-size: 14px;
+  display: inline-block;
+  position: relative;
+  top: -2px;
+  font-weight: bold;
+  margin-right: 4px;
+  color: #8050C7;
+}

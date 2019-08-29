@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ContentCard from '../../shared/ContentCard';
-import Link from '../../shared/Link';
-import routes from '../../shared/constants/routes';
+import ReadCard from './ReadCard';
 
 const DEFAULT_READ_CARD_TOP = 50;
 const DEFAULT_READ_CARD_LEFT = 0;
@@ -39,14 +38,12 @@ class MoveableReadCard extends Component {
           transform: this.getTransform(),
         }}
       >
-        Lorem ipsum
-        <Link to={routes.readVerse.action({ bookName: 'genesis', chapterId: 1, verseId: 1 })}>
-          Read verse
-        </Link>
+        <ReadCard />
       </ContentCard>
     );
   }
 }
+
 
 const mapStateToProps = state => ({
   isMainNavOpen: state.navigation.isMainNavOpen,
