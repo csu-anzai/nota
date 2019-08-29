@@ -15,7 +15,7 @@ const BookSelection = ({
       className={bookName === bookKey ? 'active' : undefined}
       onClick={() => setSelectedBookName(bookKey)}
     >
-      {bookKey}
+      {BOOK_DETAILS[bookKey].displayName}
     </BookButton>
   ));
 };
