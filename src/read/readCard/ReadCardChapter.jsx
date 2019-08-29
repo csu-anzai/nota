@@ -24,6 +24,7 @@ const ReadCardChapter = ({
 
   return versesText.map((verseText, index) => (
     <ReadCardVerse
+      key={`readChapter-${index}`}
       verseText={verseText}
       verseNumber={index + 1}
     />
