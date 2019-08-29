@@ -23,9 +23,12 @@ const ReadNavHeader = ({
   toggleIsBookNavOpen,
 }) => {
   const { type } = location;
+  const activeRoute = activeRouteMap[type];
 
-  const isReadLocation = activeRouteMap[type].type === routes.read.type;
-  console.log(isReadLocation);
+  if (!activeRoute) return null;
+
+  const isReadLocation = activeRoute.type === routes.read.type;
+
   if (!isReadLocation) return null;
 
   const readNavTitle = getReadNavTitle(location);
