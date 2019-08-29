@@ -6,7 +6,7 @@ const NavigationLink = styled(NavLink)`
   display: block;
   padding: 12px 16px;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 20px;
   color: ${theme.blank};
 
   &.active {
