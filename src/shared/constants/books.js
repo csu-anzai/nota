@@ -116,6 +116,86 @@ export const BOOK_DETAILS = {
     id: 23,
     displayName: 'Isaiah',
     numberOfChapters: 66,
+  },
+  jeremiah: {
+    id: 24,
+    displayName: 'Jeremiah',
+    numberOfChapters: 52,
+  },
+  lamentations: {
+    id: 25,
+    displayName: 'Lamentations',
+    numberOfChapters: 5,
+  },
+  ezekial: {
+    id: 26,
+    displayName: 'Ezekial',
+    numberOfChapters: 48,
+  },
+  daniel: {
+    id: 27,
+    displayName: 'Daniel',
+    numberOfChapters: 12,
+  },
+  hosea: {
+    id: 28,
+    displayName: 'Hosea',
+    numberOfChapters: 14,
+  },
+  joel: {
+    id: 29,
+    displayName: 'Joel',
+    numberOfChapters: 3,
+  },
+  amos: {
+    id: 30,
+    displayName: 'Amos',
+    numberOfChapters: 9,
+  },
+  obadiah: {
+    id: 31,
+    displayName: 'Obadiah',
+    numberOfChapters: 1,
+  },
+  jonah: {
+    id: 32,
+    displayName: 'Jonah',
+    numberOfChapters: 4,
+  },
+  micah: {
+    id: 33,
+    displayName: 'Micah',
+    numberOfChapters: 7,
+  },
+  nahum: {
+    id: 34,
+    displayName: 'Nahum',
+    numberOfChapters: 3,
+  },
+  habakkuk: {
+    id: 35,
+    displayName: 'Habakkuk',
+    numberOfChapters: 3,
+  },
+  zephaniah: {
+    id: 36,
+    displayName: 'Zephaniah',
+    numberOfChapters: 3,
+  },
+  haggai: {
+    id: 37,
+    displayName: 'Haggai',
+    numberOfChapters: 2,
+  },
+  zechariah: {
+    id: 38,
+    displayName: 'Zechariah',
+    numberOfChapters: 14,
+  },
+  malachi: {
+    id: 39,
+    displayName: 'Malachi',
+    numberOfChapters: 4,
   }
 };
 
