@@ -4,6 +4,12 @@ import routes from '../../shared/constants/routes';
 import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 
+const getVerseClasses = (verseNumber, selectedVerseNumber, hasAnnotations) => {
+  if (verseNumber === selectedVerseNumber) return 'active';
+  if (hasAnnotations) return 'hasAnnotations';
+  return undefined;
+}
+
 const ReadCardVerse = ({
     verseText,
     verseNumber,
@@ -11,24 +17,19 @@ const ReadCardVerse = ({
 }) => {
   if (!verseText || !verseNumber) return null;
 
+  const className = getVerseClasses(verseNumber, selectedVerseNumber, false);
+
   return (
     <>
       <VerseLink
         to={routes.readVerse.action({ verseId: verseNumber })}
-        hasAnnotations={verseNumber === 3 || verseNumber === 4}
-        active={selectedVerseNumber === verseNumber}
+        className={className}
       >
         <span className="verseNumber">{verseNumber}</span>
         {verseText}
       </VerseLink>
     </>
   );
-};
-
-const getBackgroundColor = ({ hasAnnotations, active }) => {
-  if (active) return theme.primaryT;
-  if (hasAnnotations) return theme.subtleT;
-  return 'transparent';
 };
 
 const VerseLink = styled(Link)`
@@ -41,7 +42,14 @@ const VerseLink = styled(Link)`
   font-size: 18px;
   -webkit-tap-highlight-color: ${theme.secondaryT};
   margin-right: 2px;
-  background-color: ${getBackgroundColor};
+
+  &.active {
+    background-color: ${theme.primaryT};
+  }
+
+  &.hasAnnotations {
+    background-color: ${theme.subtleT};
+  }
 `;
 
 export default ReadCardVerse;
