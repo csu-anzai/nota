@@ -8,6 +8,7 @@ import MainNavigation from './MainNavigation';
 import ReadNavigation from './ReadNavigation';
 import NavigationIconButton from './NavigationIconButton';
 import ReadNavHeader from './ReadNavHeader';
+import theme from '../styles/theme';
 
 const menuIconStyle = { marginTop: -6 };
 
@@ -52,7 +53,7 @@ const Navigation = ({
 
 const NavigationContainer = styled.div`
   color: white;
-  height: 50px;
+  height: ${theme.topbarSize}px;
 `;
 
 const mapStateToProps = state => ({

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ContentCard from '../../shared/ContentCard';
 import ReadCard from './ReadCard';
+import theme from '../../styles/theme';
 
-const DEFAULT_READ_CARD_TOP = 50;
+const DEFAULT_READ_CARD_TOP = theme.topbarSize;
 const DEFAULT_READ_CARD_LEFT = 0;
 const DEFAULT_READ_CARD_NAV_OFFSET = 100;
 

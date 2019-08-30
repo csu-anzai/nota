@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ChapterSelection from './ChapterSelection';
 import BookSelection from './BookSelection';
 import styled from '@emotion/styled';
+import theme from '../styles/theme';
 
 const ReadNavigation = ({ bookName, chapterId, close }) => {
   const [selectedBookName, setSelectedBookName] = useState(bookName);
@@ -53,7 +54,7 @@ const ReadNavigation = ({ bookName, chapterId, close }) => {
 
 const ReadNavigationContainer = styled.div`
   position: fixed;
-  top: 50px;
+  top: ${theme.topbarSize}px;
   bottom: 0;
   left: 0;
   right: 0;
