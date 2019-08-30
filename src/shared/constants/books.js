@@ -196,6 +196,141 @@ export const BOOK_DETAILS = {
     id: 39,
     displayName: 'Malachi',
     numberOfChapters: 4,
-  }
+  },
+  matthew: {
+    id: 40,
+    displayName: 'Matthew',
+    numberOfChapters: 28,
+  },
+  mark: {
+    id: 41,
+    displayName: 'Mark',
+    numberOfChapters: 16,
+  },
+  luke: {
+    id: 42,
+    displayName: 'Luke',
+    numberOfChapters: 24,
+  },
+  john: {
+    id: 43,
+    displayName: 'John',
+    numberOfChapters: 21,
+  },
+  acts: {
+    id: 44,
+    displayName: 'Acts',
+    numberOfChapters: 28,
+  },
+  romans: {
+    id: 45,
+    displayName: 'Romans',
+    numberOfChapters: 16,
+  },
+  '1corinthians': {
+    id: 46,
+    displayName: '1 Corinthians',
+    numberOfChapters: 16,
+  },
+  '2corinthians': {
+    id: 47,
+    displayName: '2 Corinthians',
+    numberOfChapters: 13,
+  },
+  galatians: {
+    id: 48,
+    displayName: 'Galatians',
+    numberOfChapters: 6,
+  },
+  ephesians: {
+    id: 49,
+    displayName: 'Ephesians',
+    numberOfChapters: 6,
+  },
+  philippians: {
+    id: 50,
+    displayName: 'Philippians',
+    numberOfChapters: 4,
+  },
+  colossians: {
+    id: 51,
+    displayName: 'Colossians',
+    numberOfChapters: 4,
+  },
+  '1thessalonians': {
+    id: 52,
+    displayName: '1 Thessalonians',
+    numberOfChapters: 5,
+  },
+  '2thessalonians': {
+    id: 53,
+    displayName: '2 Thessalonians',
+    numberOfChapters: 3,
+  },
+  '1timothy': {
+    id: 54,
+    displayName: '1 Timothy',
+    numberOfChapters: 6,
+  },
+  '2timothy': {
+    id: 55,
+    displayName: '2 Timothy',
+    numberOfChapters: 4,
+  },
+  titus: {
+    id: 56,
+    displayName: 'Titus',
+    numberOfChapters: 3,
+  },
+  philemon: {
+    id: 57,
+    displayName: 'Philemon',
+    numberOfChapters: 1,
+  },
+  hebrews: {
+    id: 58,
+    displayName: 'Hebrews',
+    numberOfChapters: 13,
+  },
+  james: {
+    id: 59,
+    displayName: 'James',
+    numberOfChapters: 5,
+  },
+  '1peter': {
+    id: 60,
+    displayName: '1 Peter',
+    numberOfChapters: 5,
+  },
+  '2peter': {
+    id: 61,
+    displayName: '2 Peter',
+    numberOfChapters: 3,
+  },
+  '1john': {
+    id: 62,
+    displayName: '1 John',
+    numberOfChapters: 5,
+  },
+  '2john': {
+    id: 63,
+    displayName: '2 John',
+    numberOfChapters: 1,
+  },
+  '3john': {
+    id: 64,
+    displayName: '3 John',
+    numberOfChapters: 1,
+  },
+  jude: {
+    id: 65,
+    displayName: 'Jude',
+    numberOfChapters: 1,
+  },
+  revelation: {
+    id: 66,
+    displayName: 'Revelation',
+    numberOfChapters: 22,
+  },
 };
 
