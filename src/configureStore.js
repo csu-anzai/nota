@@ -7,10 +7,8 @@ import reducers from './reducers/index';
 const configureStore = (preloadedState) => {
   const { reducer, middleware, enhancer, initialDispatch } = connectRoutes(routesMap, {
     initialDispatch: false,
-    basename: '/bn-react',
+    // basename: '/bn-react',
   });
-
-  console.log('1032');
 
   const rootReducer = combineReducers({ location: reducer, ...reducers })
   const middlewares = applyMiddleware(middleware)
