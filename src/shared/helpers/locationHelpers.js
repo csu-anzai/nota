@@ -2,9 +2,9 @@ import { store } from '../..';
 
 export const getLocationPayload = () => store.getState().location.payload;
 
-export const getBookId = () => {
-  const { bookId } = getLocationPayload();
-  return bookId;
+export const getBookName = () => {
+  const { bookName } = getLocationPayload();
+  return bookName;
 };
 
 export const getChapterId = () => {

@@ -7,11 +7,10 @@ import ReadCardVerse from './ReadCardVerse';
 const ReadCardChapter = ({
   bookName,
   chapterId,
+  verseId,
 }) => {
   const bookDetails = BOOK_DETAILS[bookName];
   const { id: bookId } = bookDetails || {};
-
-  console.log(bookDetails, bookId, chapterId);
 
   let versesText = null;
   try {
@@ -27,6 +26,7 @@ const ReadCardChapter = ({
       key={`readChapter-${index}`}
       verseText={verseText}
       verseNumber={index + 1}
+      selectedVerseNumber={verseId}
     />
   ));
 };

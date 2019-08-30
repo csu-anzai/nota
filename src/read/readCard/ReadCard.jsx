@@ -10,6 +10,7 @@ const ReadCard = () => (
 
 const ContentCardContainer = styled.div`
   padding: 16px;
+  margin-bottom: 100px;
 `;
 
 export default ReadCard;
