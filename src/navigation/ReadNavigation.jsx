@@ -59,6 +59,7 @@ const ReadNavigationContainer = styled.div`
   left: 0;
   right: 0;
   overflow-y: auto;
+  padding-bottom: 100px;
 `;
 
 const mapStateToProps = state => ({
