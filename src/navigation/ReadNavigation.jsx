@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
 import ChapterSelection from './ChapterSelection';
 import BookSelection from './BookSelection';
@@ -6,26 +7,47 @@ import styled from '@emotion/styled';
 
 const ReadNavigation = ({ bookName, chapterId, close }) => {
   const [selectedBookName, setSelectedBookName] = useState(bookName);
+  const [showChapterSelection, setShowChapterSelection] = useState(!!selectedBookName);
 
-  if (selectedBookName) return (
-    <ReadNavigationContainer>
-      <ChapterSelection
-        bookName={selectedBookName}
-        isBookActive={selectedBookName === bookName}
-        setSelectedBookName={setSelectedBookName}
-        chapterId={chapterId}
-        close={close}
-      />
-    </ReadNavigationContainer>
-  );
+  const handleBookSelection = (bookName) => {
+    setSelectedBookName(bookName);
+    setShowChapterSelection(true);
+  };
+
+  const showBookSelection = () => setShowChapterSelection(false);
 
   return (
-    <ReadNavigationContainer>
-      <BookSelection
-        bookName={bookName}
-        setSelectedBookName={setSelectedBookName}
-      />
-    </ReadNavigationContainer>
+    <>
+      <CSSTransition
+        in={showChapterSelection}
+        timeout={200}
+        classNames="chapterSelection"
+        unmountOnExit
+      >
+        <ReadNavigationContainer>
+          <ChapterSelection
+            bookName={selectedBookName}
+            isBookActive={selectedBookName === bookName}
+            chapterId={chapterId}
+            showBookSelection={showBookSelection}
+            close={close}
+          />
+        </ReadNavigationContainer>
+      </CSSTransition>
+      <CSSTransition
+        in={!showChapterSelection}
+        timeout={200}
+        classNames="bookSelection"
+        unmountOnExit
+      >
+        <ReadNavigationContainer>
+          <BookSelection
+            bookName={bookName}
+            handleBookSelection={handleBookSelection}
+          />
+        </ReadNavigationContainer>
+      </CSSTransition>
+    </>
   );
 };
 

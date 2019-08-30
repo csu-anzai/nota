@@ -11,11 +11,11 @@ const ChapterSelection = ({
   bookName,
   isBookActive,
   chapterId,
-  setSelectedBookName,
+  showBookSelection,
   close,
 }) => {
   const {numberOfChapters} = BOOK_DETAILS[bookName] || {};
-  if (!numberOfChapters) throw new Error(`Invalid bookName: ${bookName}`);
+  if (!numberOfChapters) return null;
 
   const chapterButtons = [];
 
@@ -36,7 +36,7 @@ const ChapterSelection = ({
     <>
       <NavigationIconButton
         type="button"
-        onClick={() => setSelectedBookName(null)}
+        onClick={showBookSelection}
       >
         <Icon icon={ICONS.ANGLE_LEFT} />
         All books

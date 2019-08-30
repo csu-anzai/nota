@@ -36,24 +36,6 @@ html {
   background: #FF0000;
 } */
 
-.navigationItems-enter {
-	opacity: 0.01;
-}
-
-.navigationItems-enter-active {
-	opacity: 1;
-	transition: all .2s ease-out;
-}
-
-.navigationItems-exit {
-	opacity: 1;
-}
-
-.navigationItems-exit-active {
-	opacity: .01;
-	transition: all .2s ease-out;
-}
-
 .verse {
   padding: 5px;
   line-height: 1.4em;

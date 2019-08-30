@@ -6,14 +6,14 @@ import theme from '../styles/theme';
 
 const BookSelection = ({
   bookName,
-  setSelectedBookName,
+  handleBookSelection,
 }) => {
   return Object.keys(BOOK_DETAILS).map((bookKey) => (
     <BookButton
       key={`${bookKey}-navigationButton`}
       type="button"
       className={bookName === bookKey ? 'active' : undefined}
-      onClick={() => setSelectedBookName(bookKey)}
+      onClick={() => handleBookSelection(bookKey)}
     >
       {BOOK_DETAILS[bookKey].displayName}
     </BookButton>
