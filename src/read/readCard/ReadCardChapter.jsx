@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import bibleWeb from '../../shared/books/web';
+import bibleWeb from '../../shared/books/web-formatted';
 import { BOOK_DETAILS } from '../../shared/constants/books';
 import ReadCardVerse from './ReadCardVerse';
 
@@ -9,25 +9,28 @@ const ReadCardChapter = ({
   chapterId,
   verseId,
 }) => {
-  const bookDetails = BOOK_DETAILS[bookName];
-  const { id: bookId } = bookDetails || {};
-
-  let versesText = null;
+  let chapter = null;
   try {
-    versesText = bibleWeb[bookId][chapterId];
+    chapter = bibleWeb[bookName].chapters[chapterId];
   } catch (e) {
     // nothing
   }
 
-  if (!versesText) return 'Invalid book / chapter';
+  if (!chapter) return 'Invalid book / chapter';
 
-  return versesText.map((verseText, index) => (
-    <ReadCardVerse
-      key={`readChapter-${index}`}
-      verseText={verseText}
-      verseNumber={index + 1}
-      selectedVerseNumber={verseId}
-    />
+  let verseNumber = 1;
+
+  return chapter.blocks.map((block, index) => (
+    <p>
+      {block.map((verseLines) => (
+        <ReadCardVerse
+          key={`readChapter-${index}`}
+          verseLines={verseLines}
+          verseNumber={verseNumber++}
+          selectedVerseNumber={verseId}
+        />
+      ))}
+    </p>
   ));
 };
 

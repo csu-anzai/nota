@@ -7,6 +7,9 @@ import App from './root/App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import configureStore from './configureStore';
+import bible from './shared/books/parsedBook';
+
+window.bible = bible
 
 export const store = configureStore();
 

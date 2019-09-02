@@ -11,11 +11,11 @@ const getVerseClasses = (verseNumber, selectedVerseNumber, hasAnnotations) => {
 }
 
 const ReadCardVerse = ({
-    verseText,
+    verseLines,
     verseNumber,
     selectedVerseNumber,
 }) => {
-  if (!verseText || !verseNumber) return null;
+  if (!verseLines || !verseNumber) return null;
 
   const className = getVerseClasses(verseNumber, selectedVerseNumber, false);
 
@@ -25,8 +25,25 @@ const ReadCardVerse = ({
         to={routes.readVerse.action({ verseId: verseNumber })}
         className={className}
       >
-        <span className="verseNumber">{verseNumber}</span>
-        {verseText}
+        {verseLines.map(({ text, quote }, index) => {
+          if (text) {
+            return (
+              <span className="text">
+                {index === 0 && <span className="verseNumber">{verseNumber}</span>}
+                {text}
+              </span>
+            );
+          } else if (quote) {
+            return (
+              <blockquote>
+                {index === 0 && <span className="verseNumber">{verseNumber}</span>}
+                {quote}
+              </blockquote>
+            );
+          }
+          
+          return null;
+        })}
       </VerseLink>
     </>
   );
@@ -43,8 +60,15 @@ const VerseLink = styled(Link)`
   -webkit-tap-highlight-color: ${theme.secondaryT};
   margin-right: 2px;
 
+  blockquote {
+    display: inline-block;
+    margin: 0 10%;
+  }
+
   &.active {
-    background-color: ${theme.primaryT};
+    .text, blockquote {
+      background-color: ${theme.primaryT};
+    }
   }
 
   &.hasAnnotations {

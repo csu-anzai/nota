@@ -42,32 +42,32 @@ export const BOOK_DETAILS = {
     displayName: 'Ruth',
     numberOfChapters: 4,
   },
-  '1samuel': {
+  '1Samuel': {
     id: 9,
     displayName: '1 Samuel',
     numberOfChapters: 31,
   },
-  '2samuel': {
+  '2Samuel': {
     id: 10,
     displayName: '2 Samuel',
     numberOfChapters: 24,
   },
-  '1kings': {
+  '1Kings': {
     id: 11,
     displayName: '1 Kings',
     numberOfChapters: 22,
   },
-  '2kings': {
+  '2Kings': {
     id: 12,
     displayName: '2 Kings',
     numberOfChapters: 25,
   },
-  '1chronicles': {
+  '1Chronicles': {
     id: 13,
     displayName: '1 Chronicles',
     numberOfChapters: 29,
   },
-  '2chronicles': {
+  '2Chronicles': {
     id: 14,
     displayName: '2 Chronicles',
     numberOfChapters: 36,
@@ -227,12 +227,12 @@ export const BOOK_DETAILS = {
     displayName: 'Romans',
     numberOfChapters: 16,
   },
-  '1corinthians': {
+  '1Corinthians': {
     id: 46,
     displayName: '1 Corinthians',
     numberOfChapters: 16,
   },
-  '2corinthians': {
+  '2Corinthians': {
     id: 47,
     displayName: '2 Corinthians',
     numberOfChapters: 13,
@@ -257,12 +257,12 @@ export const BOOK_DETAILS = {
     displayName: 'Colossians',
     numberOfChapters: 4,
   },
-  '1thessalonians': {
+  '1Thessalonians': {
     id: 52,
     displayName: '1 Thessalonians',
     numberOfChapters: 5,
   },
-  '2thessalonians': {
+  '2Thessalonians': {
     id: 53,
     displayName: '2 Thessalonians',
     numberOfChapters: 3,
@@ -272,7 +272,7 @@ export const BOOK_DETAILS = {
     displayName: '1 Timothy',
     numberOfChapters: 6,
   },
-  '2timothy': {
+  '2Timothy': {
     id: 55,
     displayName: '2 Timothy',
     numberOfChapters: 4,
@@ -297,27 +297,27 @@ export const BOOK_DETAILS = {
     displayName: 'James',
     numberOfChapters: 5,
   },
-  '1peter': {
+  '1Peter': {
     id: 60,
     displayName: '1 Peter',
     numberOfChapters: 5,
   },
-  '2peter': {
+  '2Peter': {
     id: 61,
     displayName: '2 Peter',
     numberOfChapters: 3,
   },
-  '1john': {
+  '1John': {
     id: 62,
     displayName: '1 John',
     numberOfChapters: 5,
   },
-  '2john': {
+  '2John': {
     id: 63,
     displayName: '2 John',
     numberOfChapters: 1,
   },
-  '3john': {
+  '3John': {
     id: 64,
     displayName: '3 John',
     numberOfChapters: 1,
