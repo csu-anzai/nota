@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Draggable, { AXIS, DIRECTION } from '../../shared/helpers/draggable';
 import ResizeHook from '../../shared/ResizeHook';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
@@ -9,7 +10,9 @@ import { goTo } from '../../shared/helpers/locationHelpers';
 
 const { UP } = DIRECTION;
 
-const getValidRestingPoints = current => current.id === 2 ? [FULL, COLLAPSED, HIDDEN] : [FULL, COLLAPSED]
+const getValidRestingPoints = current => current.id === 2 ? [FULL, COLLAPSED, HIDDEN] : [FULL, COLLAPSED];
+
+const isEitherNavOpen = ({ isMainNavOpen = false, isBookNavOpen = false }) => isMainNavOpen || isBookNavOpen;
 
 class DraggableVerseCard extends Component {
   constructor(props) {
@@ -29,6 +32,17 @@ class DraggableVerseCard extends Component {
 
   componentWillUnmount() {
     this.draggable.destroy();
+  }
+
+  componentDidUpdate(prevProps) {
+    const isNavOpen = isEitherNavOpen(this.props);
+    const wasNavOpen = isEitherNavOpen(prevProps);
+
+    if (!wasNavOpen && isNavOpen) {
+      this.draggable.animateToRestingPoint(HIDDEN);
+    } else if (wasNavOpen && !isNavOpen) {
+      this.draggable.animateToRestingPoint(COLLAPSED);
+    }
   }
 
   initDraggable = (ref) => {
@@ -89,7 +103,7 @@ class DraggableVerseCard extends Component {
   handleAnimateToCompleted = ({ point: { restingPoint }}) => {
     const { id } = restingPoint;
 
-    if (id === 3) {
+    if (id === 3 && !isEitherNavOpen(this.props)) {
       goTo(routes.readChapter.action());
     }
   }
@@ -157,4 +171,9 @@ class DraggableVerseCard extends Component {
   };
 }
 
-export default DraggableVerseCard;
+const mapStateToProps = state => ({
+  isMainNavOpen: state.navigation.isMainNavOpen,
+  isBookNavOpen: state.navigation.isBookNavOpen
+});
+
+export default connect(mapStateToProps)(DraggableVerseCard);
