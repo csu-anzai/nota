@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import bibleWeb from '../../shared/books/web-formatted';
-import { BOOK_DETAILS } from '../../shared/constants/books';
+import bibleWeb from '../../shared/books/parsedBook';
+// import { BOOK_DETAILS } from '../../shared/constants/books';
 import ReadCardVerse from './ReadCardVerse';
 
 const ReadCardChapter = ({
@@ -21,11 +21,14 @@ const ReadCardChapter = ({
   let verseNumber = 1;
 
   return chapter.blocks.map((block, index) => (
-    <p>
-      {block.map((verseLines) => (
+    <p key={`readChapterBlock-${bookName}-${index}`}>
+      {block.map((verseLines, lineIndex) => (
         <ReadCardVerse
-          key={`readChapter-${index}`}
+          key={`readChapterBlock-${bookName}-${index}-${lineIndex}`}
+          lineIndex={lineIndex}
           verseLines={verseLines}
+          bookName={bookName}
+          chapterNumber={index}
           verseNumber={verseNumber++}
           selectedVerseNumber={verseId}
         />

@@ -25,6 +25,7 @@ const getParsedBook = (book, index) => {
   let workingVerse = [];
 
   book.childNodes.forEach((child) => {
+    if (index === 41) console.log(child);
     if (child.tagName === 'c') {
       if (workingChapterJson.id) {
         if (workingVerse.length > 0) {
@@ -48,6 +49,12 @@ const getParsedBook = (book, index) => {
 
     if (child.tagName === 'p') {
       if (workingBlock.length > 0) {
+        if (workingVerse.length > 0) {
+          workingBlock.push(workingVerse);
+
+          workingVerse = [];
+        }
+
         workingChapterJson.blocks.push(workingBlock);
       }
 
@@ -55,6 +62,9 @@ const getParsedBook = (book, index) => {
 
       child.childNodes.forEach((line) => {
         if (line.tagName === 'f') return;
+
+        // TODO: handle footnote references
+        if (line.tagName === 'x') return;
         
         if (line.tagName === 'v') {
           if (workingVerse.length > 0) {
@@ -84,7 +94,7 @@ const getParsedBook = (book, index) => {
           } else {
             const text = removeNewLines(child.textContent);
 
-            if (text !== "" && (workingVerse.length > 0 && text !== workingVerse[workingVerse.length - 1].quote)) {
+            if (text !== "" && !(workingVerse.length > 0 && text === workingVerse[workingVerse.length - 1].quote)) {
               workingVerse.push({ quote: text });
             }
           }
@@ -92,7 +102,7 @@ const getParsedBook = (book, index) => {
       } else {
         const text = removeNewLines(child.textContent);
     
-        if (text !== "") {
+        if (text !== "" && !(workingVerse.length > 0 && text === workingVerse[workingVerse.length - 1].quote)) {
           workingVerse.push({ quote: text });
         }
       }
