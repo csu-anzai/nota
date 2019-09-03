@@ -25,7 +25,6 @@ const getParsedBook = (book, index) => {
   let workingVerse = [];
 
   book.childNodes.forEach((child) => {
-    if (index === 40) console.log(child);
     if (child.tagName === 'c') {
       if (workingChapterJson.id) {
         if (workingVerse.length > 0) {

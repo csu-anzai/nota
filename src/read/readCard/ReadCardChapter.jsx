@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import bibleWeb from '../../shared/books/parsedBook';
+import bibleWeb from '../../shared/books/web-formatted';
 // import { BOOK_DETAILS } from '../../shared/constants/books';
 import ReadCardVerse from './ReadCardVerse';
 
