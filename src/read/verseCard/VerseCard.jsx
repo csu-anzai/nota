@@ -1,29 +1,35 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import theme from '../../styles/theme';
 import styled from '@emotion/styled';
 import VerseCardHeader from './VerseCardHeader';
 import VerseCardBody from './VerseCardBody';
+import { getVerse } from '../../shared/helpers/bookHelpers';
 
 const VerseCard = ({
-  verse,
+  payload,
   draggableRef,
   handleClick,
   iconRef,
   scrollerRef,
   currentRestingPoint,
-}) => (
-  <VerseCardDiv ref={draggableRef} currentRestingPoint={currentRestingPoint}>
-    <VerseCardHeader
-      verse={verse}
-      iconRef={iconRef}
-      handleClick={handleClick}
-    />
-    <VerseCardBody
-      verse={verse}
-      scrollerRef={scrollerRef}
-    />
-  </VerseCardDiv>
-);
+}) => {
+  const verse = getVerse(payload);
+  
+  return (
+    <VerseCardDiv ref={draggableRef} currentRestingPoint={currentRestingPoint}>
+      <VerseCardHeader
+        verse={verse}
+        iconRef={iconRef}
+        handleClick={handleClick}
+      />
+      <VerseCardBody
+        verse={verse}
+        scrollerRef={scrollerRef}
+      />
+    </VerseCardDiv>
+  );
+};
 
 const VerseCardDiv = styled.div`
   display: flex;
@@ -40,4 +46,8 @@ const VerseCardDiv = styled.div`
   box-shadow: ${({ currentRestingPoint }) => currentRestingPoint.id === 1 ? `0px 0px 0px 12px ${theme.primary}` : `none`}; 
 `;
 
-export default VerseCard;
+const mapStateToProps = state => ({
+  payload: state.location.payload,
+});
+
+export default connect(mapStateToProps)(VerseCard);
