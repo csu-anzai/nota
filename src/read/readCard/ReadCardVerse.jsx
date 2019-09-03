@@ -68,6 +68,7 @@ const VerseLink = styled(Link)`
   .quote {
     display: inline-block;
     margin: 0 10%;
+    width: 80%;
   }
 
   &.active {
