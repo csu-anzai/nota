@@ -20,21 +20,27 @@ const ReadCardChapter = ({
 
   let verseNumber = 1;
 
-  return chapter.blocks.map((block, index) => (
-    <p key={`readChapterBlock-${bookName}-${index}`}>
-      {block.map((verseLines, lineIndex) => (
-        <ReadCardVerse
-          key={`readChapterBlock-${bookName}-${index}-${lineIndex}`}
-          lineIndex={lineIndex}
-          verseLines={verseLines}
-          bookName={bookName}
-          chapterNumber={index}
-          verseNumber={verseNumber++}
-          selectedVerseNumber={verseId}
-        />
-      ))}
-    </p>
-  ));
+  return chapter.blocks.map((block, index) => {
+    const blockKey = `readChapterBlock-${bookName}-${index}`;
+
+    return (
+      <p key={blockKey}>
+        {block.map((verseLines, lineIndex) => {
+          const lineKey = `${blockKey}-${lineIndex}`;
+          
+          return (
+            <ReadCardVerse
+              key={lineKey}
+              lineKey={lineKey}
+              verseLines={verseLines}
+              verseNumber={verseNumber++}
+              selectedVerseNumber={verseId}
+            />
+          );
+        })}
+      </p>
+    );
+  });
 };
 
 const mapStateToProps = state => ({

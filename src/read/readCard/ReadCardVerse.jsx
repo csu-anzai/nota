@@ -11,12 +11,10 @@ const getVerseClasses = (verseNumber, selectedVerseNumber, hasAnnotations) => {
 }
 
 const ReadCardVerse = ({
-    bookName,
-    chapterNumber,
-    lineIndex,
     verseLines,
     verseNumber,
     selectedVerseNumber,
+    lineKey,
 }) => {
   if (!verseLines || !verseNumber) return null;
 
@@ -29,7 +27,7 @@ const ReadCardVerse = ({
         className={className}
       >
         {verseLines.map(({ text, quote }, index) => {
-          const key = `verseLine-${bookName}-${chapterNumber}-${lineIndex}-${index}`;
+          const key = `${lineKey}-${index}`;
 
           if (text) {
             return (
