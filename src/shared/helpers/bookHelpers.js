@@ -31,7 +31,6 @@ export const getVerseLines = ({ bookName, chapterId, verseId }) => {
     const verseInt = parseInt(verseId, 10);
 
     const { block, firstVerseInBlock } = getBlockForVerseId(chapterBlocks, verseId);
-    console.log(verseInt, block, firstVerseInBlock);
 
     return block[verseInt - firstVerseInBlock - 1];
   } catch (e) {
