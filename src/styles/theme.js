@@ -8,6 +8,7 @@ const theme = {
   secondaryT: 'rgba(82, 146, 255, 0.12)',
   topbarSize: 60,
   subtleT: 'rgba(0, 0, 0, .05)',
+  borderColor: 'rgb(220, 220, 220)',
 };
 
 export default theme;

@@ -63,6 +63,11 @@ const CreateAnnotationContainer = styled.div`
   right: 0;
   left: 0;
   background-color: ${theme.blank};
+
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  min-height: 0;
 `;
 
 export default CreateAnnotation;
