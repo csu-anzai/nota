@@ -53,7 +53,7 @@ export const getVerseTitle = ({ bookName, chapterId, verseId }) => {
   return `${bookTitle} ${chapterId}:${verseId}`;
 }
 
-export const getVerseId = ({ bookName, chapterId, verseId }) => {
+export const getFullVerseId = ({ bookName, chapterId, verseId } = getLocationPayload()) => {
   const { id: bookId } = BOOK_DETAILS[bookName];
 
   const paddedBookId = `${bookId}`.padStart(2, '0');
@@ -69,7 +69,7 @@ export const getVerse = memoize((args = getLocationPayload()) => {
   if (!text) return null;
   
   return {
-    id: getVerseId(args),
+    id: getFullVerseId(args),
     title: getVerseTitle(args),
     text,
   };
