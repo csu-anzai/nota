@@ -12,6 +12,7 @@ const Content = ({ path }) => {
     case routes.readBook.type:
     case routes.readChapter.type:
     case routes.readVerse.type:
+    case routes.createAnnotation.type:
       return <Read />;
     default:
       return <Home />;

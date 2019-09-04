@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import DraggableVerseCard from './verseCard/DraggableVerseCard';
 import CardContainer from '../shared/CardContainer';
 import MoveableReadCard from './readCard/MoveableReadCard';
+import CreateAnnotationMounter from './annotation/CreateAnnotationMounter';
 
-const Read = ({ verseId }) => (
+const Read = ({ verseId, locationType }) => (
   <>
     <CardContainer>
       <MoveableReadCard />
@@ -14,11 +15,12 @@ const Read = ({ verseId }) => (
         <DraggableVerseCard verseId={verseId} />
       </CardContainer>
     )}
+    <CreateAnnotationMounter />
   </>
 );
 
 const mapStateToProps = state => ({
-  verseId: state.location.payload.verseId
+  verseId: state.location.payload.verseId,
 });
 
 export default connect(mapStateToProps)(Read);

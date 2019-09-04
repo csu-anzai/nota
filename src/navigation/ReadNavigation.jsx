@@ -38,7 +38,7 @@ const ReadNavigation = ({ bookName, chapterId, close }) => {
       <CSSTransition
         in={!showChapterSelection}
         timeout={200}
-        classNames="bookSelection"
+        classNames="fadeUp"
         unmountOnExit
       >
         <ReadNavigationContainer>

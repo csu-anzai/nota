@@ -12,4 +12,9 @@ export const getChapterId = () => {
   return chapterId;
 };
 
+export const getVerseId = () => {
+  const { verseId } = getLocationPayload();
+  return verseId;
+}
+
 export const goTo = (action) => store.dispatch(action);

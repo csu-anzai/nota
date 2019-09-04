@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
+import { connect } from 'react-redux';
 import { Button } from '../../shared/Html';
 import Icon, { ICONS } from '../../shared/Icon';
 import theme from '../../styles/theme';
+import routes from '../../shared/constants/routes';
 
 class AddAnnotationButton extends Component {
   state = {}
@@ -19,12 +21,13 @@ class AddAnnotationButton extends Component {
   // }
   
   render() {
-    const { hide } = this.props;
+    const { hide, createAnnotationAction } = this.props;
 
     return (
       <AddAnnotationButtonContainer>
         <AddAnnotationStyledButton
           type="button"
+          onClick={() => createAnnotationAction()}
           className={hide ? 'hide' : undefined}
         >
           <Icon icon={ICONS.PLUS} size={22} />
@@ -62,4 +65,4 @@ const AddAnnotationStyledButton = styled(Button)`
   }
 `;
 
-export default AddAnnotationButton;
+export default connect(null, { createAnnotationAction: routes.createAnnotation.action })(AddAnnotationButton);

@@ -1,4 +1,4 @@
-import { getBookName, getChapterId } from "../helpers/locationHelpers";
+import { getBookName, getChapterId, getVerseId } from "../helpers/locationHelpers";
 
 const routes = {
   home: {
@@ -30,9 +30,16 @@ const routes = {
     type: 'READ_VERSE',
     path: '/read/:bookName/:chapterId/:verseId',
     getActiveRoute: () => routes.read,
-    action: ({ bookName = getBookName(), chapterId = getChapterId(), verseId } = {}) => 
+    action: ({ bookName = getBookName(), chapterId = getChapterId(), verseId = getVerseId() } = {}) => 
       ({ type: 'READ_VERSE', payload: { bookName, chapterId, verseId } }),
   },
+  createAnnotation: {
+    type: 'ANNOTATE_VERSE',
+    path: '/read/:bookName/:chapterId/:verseId/annotate',
+    getActiveRoute: () => routes.read,
+    action: ({ bookName = getBookName(), chapterId = getChapterId(), verseId = getVerseId() } = {}) =>
+      ({ type: 'ANNOTATE_VERSE', payload: { bookName, chapterId, verseId } }),
+  }
 };
 
 export const { routesMap, activeRouteMap } = Object.keys(routes).reduce((acc, routesKey) => {
