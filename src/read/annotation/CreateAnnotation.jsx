@@ -6,6 +6,7 @@ import { store } from '../..';
 import routes from '../../shared/constants/routes';
 import * as Annotations from './Annotations';
 import AnnotationEditor from './AnnotationEditor';
+import Icon, { ICONS } from '../../shared/Icon';
 
 class CreateAnnotation extends Component {
   state = {
@@ -33,20 +34,22 @@ class CreateAnnotation extends Component {
     
     return (
       <CreateAnnotationContainer>
-        <div>
+        <CreateAnnotationButtonRow>
           <Button
             type="button"
             onClick={() => store.dispatch(routes.readVerse.action())}
+            className="editorDiscard"
           >
-            Close
+            <Icon icon={ICONS.ANGLE_LEFT} />Discard
           </Button>
           <Button
             type="button"
             onClick={this.handleSave}
+            className="editorSave"
           >
-            Save
+            <Icon icon={ICONS.CHECK} />Save
           </Button>
-        </div>
+        </CreateAnnotationButtonRow>
         <AnnotationEditor
           text={text}
           handleChange={this.handleChange}
@@ -68,6 +71,24 @@ const CreateAnnotationContainer = styled.div`
   flex-direction: column;
   overflow-y: hidden;
   min-height: 0;
+`;
+
+const CreateAnnotationButtonRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    padding: 16px;
+    font-weight: 500;
+  }
+
+  .editorDiscard {
+    color: ${theme.textLight};
+  }
+
+  .editorSave {
+    color: ${theme.primary};
+  }
 `;
 
 export default CreateAnnotation;

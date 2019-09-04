@@ -74,7 +74,16 @@ const AnnotationQuillContainer = styled.div`
       border: none;
 
       .ql-editor {
-        font-size: 1.2em;
+        font-size: 1.3em;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        p {
+          margin-bottom: 16px;
+        }
       }
     }
   }

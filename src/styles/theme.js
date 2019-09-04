@@ -9,6 +9,7 @@ const theme = {
   topbarSize: 60,
   subtleT: 'rgba(0, 0, 0, .05)',
   borderColor: 'rgb(220, 220, 220)',
+  textLight: '#686868',
 };
 
 export default theme;
