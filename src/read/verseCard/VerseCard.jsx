@@ -6,7 +6,6 @@ import VerseCardHeader from './VerseCardHeader';
 import VerseCardBody from './VerseCardBody';
 import { getVerse } from '../../shared/helpers/bookHelpers';
 import AddAnnotationButton from './AddAnnotationButton';
-import { FULL } from './restingPoints';
 
 const VerseCard = ({
   payload,

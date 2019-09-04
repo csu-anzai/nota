@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import theme from '../../styles/theme';
 import { safelyCall } from '../../shared/helpers/functionHelpers';
 import VerseCardContentWindow from './VerseCardContentWindow';
-import AddAnnotationButton from './AddAnnotationButton';
 
 const preventDefault = (e) => { safelyCall(e.stopPropagation.bind(e)); }
 
