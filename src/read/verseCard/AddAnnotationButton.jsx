@@ -7,21 +7,31 @@ import theme from '../../styles/theme';
 import routes from '../../shared/constants/routes';
 
 class AddAnnotationButton extends Component {
-  state = {}
-  // state = {
-  //   hide: false,
-  // }
-  
-  // componentDidUpdate(prevProps) {
-  //   const { hide } = this.props;
+  // state = {}
+  state = {
+    hide: false,
+  }
 
-  //   if (prevProps.hide !== hide) {
-  //     this.setState({ hide });
-  //   }
-  // }
+  componentDidMount() {
+    this.appearTimeout = setTimeout(() => this.setState({ hide: true }), 300);
+  }
+  
+  componentDidUpdate(props) {
+    const { hide } = this.props;
+    const { hide: previousHide } = this.state;
+
+    if (hide !== previousHide) {
+      this.setState({ hide });
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.appearTimeout)
+  }
   
   render() {
-    const { hide, createAnnotationAction } = this.props;
+    const { createAnnotationAction } = this.props;
+    const { hide } = this.state;
 
     return (
       <AddAnnotationButtonContainer>

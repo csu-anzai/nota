@@ -38,6 +38,7 @@ class Draggable {
     
     this.axis = axis;
     this.currentPosition = startingPosition || 0;
+    this.isMoveable = true;
     
     this.lastTouchPosition = null;
     this.deltas = new CappedArray(3);
@@ -114,15 +115,15 @@ class Draggable {
     if (this.lastTouchPosition) {
       const delta = touchPosition - this.lastTouchPosition;
 
-      const isMoveable = !this.getIsMoveable || this.getIsMoveable(this.getMoveableArgs(e, delta));
-      if (isMoveable) this.move(delta);
+      this.isMoveable = !this.getIsMoveable || this.getIsMoveable(this.getMoveableArgs(e, delta));
+      if (this.isMoveable) this.move(delta);
     }
 
     this.lastTouchPosition = touchPosition;
   }
 
   handleTouchEnd = () => {
-    this.animateToClosestRestingPoint();
+    if (this.isMoveable) this.animateToClosestRestingPoint();
   }
 
   move = (delta) => {

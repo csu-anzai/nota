@@ -8,6 +8,7 @@ import { ANIMATION_DURATION, verse } from './constants';
 import VerseCard from './VerseCard';
 import routes from '../../shared/constants/routes';
 import { goTo } from '../../shared/helpers/locationHelpers';
+import { getEnsureState } from '../../shared/helpers/functionHelpers';
 
 const { UP } = DIRECTION;
 
@@ -28,8 +29,10 @@ class DraggableVerseCard extends Component {
     this.state = {
       restingPoints: getValidRestingPoints(HIDDEN),
       currentRestingPoint: HIDDEN,
-      showAddButton: true,
+      showAddButton: false,
     }
+
+    this.ensureState = getEnsureState(this);
   }
 
   componentWillUnmount() {
@@ -58,7 +61,6 @@ class DraggableVerseCard extends Component {
       onAnimateToCompleted: this.handleAnimateToCompleted,
       getIsMoveable: this.isMoveable,
       startingPosition: HIDDEN.getPosition(),
-      showAddButton: false,
       ref,
     });
 
@@ -114,8 +116,12 @@ class DraggableVerseCard extends Component {
   handleAnimateToCompleted = ({ point: { restingPoint }}) => {
     const { id } = restingPoint;
 
-    if (id === 3 && !isEitherNavOpen(this.props)) {
+    if (id === FULL.id) {
+      this.ensureState({ showAddButton: true });
+    } else if (id === HIDDEN.id && !isEitherNavOpen(this.props)) {
       goTo(routes.readChapter.action());
+    } else {
+      this.ensureState({ showAddButton: false });
     }
   }
 
@@ -135,18 +141,13 @@ class DraggableVerseCard extends Component {
       });
     }
   }
-
-  ensureState = (key, value) => {
-    const actualValue = this.state[key];
-
-    if (actualValue !== value) {
-      this.setState({ [key]: value });
-    }
-  }
   
-  maybeSetShowAddButton = debounce((scrollerIsAtTop, direction) => {
-    if (scrollerIsAtTop || direction === DIRECTION.DOWN) this.ensureState('showAddButton', true);
-    else this.ensureState('showAddButton', false);
+  maybeSetShowAddButton = debounce((currentRestingPoint, scrollerIsAtTop, direction) => {
+    if (currentRestingPoint === FULL && (scrollerIsAtTop || direction === DIRECTION.DOWN)) {
+      this.ensureState({ showAddButton: true });
+    } else {
+      this.ensureState({ showAddButton: false });
+    }
   }, 200)
 
   isMoveable = ({ event, direction }) => {
@@ -160,7 +161,7 @@ class DraggableVerseCard extends Component {
 
     const scrollerIsAtTop = current.scrollTop < 1;
 
-    this.maybeSetShowAddButton(scrollerIsAtTop, direction);
+    this.maybeSetShowAddButton(currentRestingPoint, scrollerIsAtTop, direction);
 
     if (direction === UP || !scrollerIsAtTop) return false;
 

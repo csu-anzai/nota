@@ -17,7 +17,7 @@ const VerseCard = ({
   showAddButton,
 }) => {
   const verse = getVerse(payload);
-  
+
   return (
     <VerseCardDiv ref={draggableRef} currentRestingPoint={currentRestingPoint}>
       <AddAnnotationButton hide={!showAddButton} />      
