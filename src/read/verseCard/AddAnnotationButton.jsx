@@ -40,7 +40,7 @@ class AddAnnotationButton extends Component {
           onClick={() => createAnnotationAction()}
           className={hide ? 'hide' : undefined}
         >
-          <Icon icon={ICONS.PLUS} size={22} />
+          <Icon icon={ICONS.EDIT} size={18} />
           Add annotation
         </AddAnnotationStyledButton>
       </AddAnnotationButtonContainer>
@@ -67,7 +67,7 @@ const AddAnnotationStyledButton = styled(Button)`
   transition: transform .3s ease-in-out;
 
   svg {
-    margin: -4px 4px 0 -4px;
+    margin: -4px 6px 0 -4px;
   }
 
   &.hide {
