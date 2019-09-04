@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import debounce from 'lodash.debounce';
 import Draggable, { AXIS, DIRECTION } from '../../shared/helpers/draggable';
 import ResizeHook from '../../shared/ResizeHook';
 import { FULL, COLLAPSED, HIDDEN, getAwayPosition } from './restingPoints';
@@ -27,6 +28,7 @@ class DraggableVerseCard extends Component {
     this.state = {
       restingPoints: getValidRestingPoints(HIDDEN),
       currentRestingPoint: HIDDEN,
+      showAddButton: true,
     }
   }
 
@@ -56,11 +58,20 @@ class DraggableVerseCard extends Component {
       onAnimateToCompleted: this.handleAnimateToCompleted,
       getIsMoveable: this.isMoveable,
       startingPosition: HIDDEN.getPosition(),
+      showAddButton: false,
       ref,
     });
 
     if (this.props.verseId) this.draggable.animateToRestingPoint(COLLAPSED);
   }
+
+  // setScrollerRef = (ref) => {
+  //   this.scrollerRef = ref;
+
+  //   const scroll$ = fromEvent(ref, 'scroll');
+
+  //   scroll$.subscribe(console.log);
+  // }
 
   getRestingPoint = (id) => {
     const { restingPoints } = this.state;
@@ -125,6 +136,19 @@ class DraggableVerseCard extends Component {
     }
   }
 
+  ensureState = (key, value) => {
+    const actualValue = this.state[key];
+
+    if (actualValue !== value) {
+      this.setState({ [key]: value });
+    }
+  }
+  
+  maybeSetShowAddButton = debounce((scrollerIsAtTop, direction) => {
+    if (scrollerIsAtTop || direction === DIRECTION.DOWN) this.ensureState('showAddButton', true);
+    else this.ensureState('showAddButton', false);
+  }, 200)
+
   isMoveable = ({ event, direction }) => {
     if (event.target.classList.contains('draggable')) return true;
     
@@ -136,6 +160,8 @@ class DraggableVerseCard extends Component {
 
     const scrollerIsAtTop = current.scrollTop < 1;
 
+    this.maybeSetShowAddButton(scrollerIsAtTop, direction);
+
     if (direction === UP || !scrollerIsAtTop) return false;
 
     return true;
@@ -146,7 +172,7 @@ class DraggableVerseCard extends Component {
   }
 
   render() {
-    const { currentRestingPoint } = this.state;
+    const { currentRestingPoint, showAddButton } = this.state;
 
     return (
       <>
@@ -165,6 +191,7 @@ class DraggableVerseCard extends Component {
           handleClick={this.handleClick}
           verse={verse}
           currentRestingPoint={currentRestingPoint}
+          showAddButton={showAddButton}
         />
       </>
     )

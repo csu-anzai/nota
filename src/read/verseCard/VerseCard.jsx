@@ -5,6 +5,8 @@ import styled from '@emotion/styled';
 import VerseCardHeader from './VerseCardHeader';
 import VerseCardBody from './VerseCardBody';
 import { getVerse } from '../../shared/helpers/bookHelpers';
+import AddAnnotationButton from './AddAnnotationButton';
+import { FULL } from './restingPoints';
 
 const VerseCard = ({
   payload,
@@ -13,11 +15,13 @@ const VerseCard = ({
   iconRef,
   scrollerRef,
   currentRestingPoint,
+  showAddButton,
 }) => {
   const verse = getVerse(payload);
   
   return (
     <VerseCardDiv ref={draggableRef} currentRestingPoint={currentRestingPoint}>
+      <AddAnnotationButton hide={!showAddButton} />      
       <VerseCardHeader
         verse={verse}
         iconRef={iconRef}
@@ -35,7 +39,7 @@ const VerseCardDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 120vh;
+  min-height: 120%;
   position: absolute;
   background: ${theme.primary};
   color: ${theme.textOnPrimary};
