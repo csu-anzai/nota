@@ -5,14 +5,15 @@ import { Button } from '../../shared/Html';
 import { store } from '../..';
 import routes from '../../shared/constants/routes';
 import * as Annotations from './Annotations';
+import AnnotationEditor from './AnnotationEditor';
 
 class CreateAnnotation extends Component {
   state = {
     text: '',
   }
 
-  handleChange = (e) => {
-    this.setState({ text: e.target.value });
+  handleChange = (text) => {
+    this.setState({ text });
   }
 
   handleSave = () => {
@@ -32,26 +33,24 @@ class CreateAnnotation extends Component {
     
     return (
       <CreateAnnotationContainer>
-        <Button
-          type="button"
-          onClick={() => store.dispatch(routes.readVerse.action())}
-        >
-          Close
-        </Button>
         <div>
-          <input
-            onChange={this.handleChange}
-            name="annotationText"
-            value={text}
-            style={{ border: '1px solid grey', padding: 4 }}
-          />
+          <Button
+            type="button"
+            onClick={() => store.dispatch(routes.readVerse.action())}
+          >
+            Close
+          </Button>
+          <Button
+            type="button"
+            onClick={this.handleSave}
+          >
+            Save
+          </Button>
         </div>
-        <Button
-          type="button"
-          onClick={this.handleSave}
-        >
-          Save
-        </Button>
+        <AnnotationEditor
+          text={text}
+          handleChange={this.handleChange}
+        />
       </CreateAnnotationContainer>
     );
   }
