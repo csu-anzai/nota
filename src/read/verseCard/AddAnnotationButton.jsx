@@ -61,7 +61,7 @@ const AddAnnotationStyledButton = styled(Button)`
   }
 
   &.hide {
-    transform: translateY(80px);
+    transform: translateY(120px);
   }
 `;
 
