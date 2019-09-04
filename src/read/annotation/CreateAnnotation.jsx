@@ -23,11 +23,14 @@ class CreateAnnotation extends Component {
     Annotations.create({ text })
       .then((coo) => {
         console.log('wow', coo);
+        this.close();
       })
       .catch((err) => {
         console.log('err', err);
       });
   }
+
+  close = () => store.dispatch(routes.readVerse.action())
   
   render() {
     const { text } = this.state;
@@ -37,7 +40,7 @@ class CreateAnnotation extends Component {
         <CreateAnnotationButtonRow>
           <Button
             type="button"
-            onClick={() => store.dispatch(routes.readVerse.action())}
+            onClick={this.close}
             className="editorDiscard"
           >
             <Icon icon={ICONS.ANGLE_LEFT} />Discard
